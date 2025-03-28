@@ -1,8 +1,8 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../helpers/dbConfig.js");
 
-const Student = sequelize.define("Student", {
-  studentNo: {
+const Supervisor = sequelize.define("Supervisor", {
+  staffNo: {
     allowNull: false,
     primaryKey: true,
     type: DataTypes.INTEGER,
@@ -16,7 +16,7 @@ const Student = sequelize.define("Student", {
   role_id: {
     allowNull: false,
     type: DataTypes.INTEGER,
-    default: 3,
+    default: 2,
   },
   surname: {
     allowNull: false,
@@ -39,4 +39,4 @@ const Student = sequelize.define("Student", {
   },
 });
 
-module.exports = Student;
+module.exports = Supervisor;
