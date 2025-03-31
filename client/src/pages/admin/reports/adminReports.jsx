@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import Sidebar from "../../../components/adminNavbar";
+import Sidebar from "../../../components/adminNavbar"; // Import Sidebar component
 
 const Reports = () => {
   const navigate = useNavigate();
@@ -19,9 +19,9 @@ const Reports = () => {
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Sidebar Component */}
-      <Sidebar />
+      <Sidebar /> {/* Imported Sidebar */}
 
-      <main className="flex-grow flex flex-col items-center justify-center p-8">
+      <main className="flex-grow flex flex-col items-center justify-start p-8">
         <div className="w-full max-w-6xl bg-white shadow-lg rounded-lg p-8">
           <h2 className="text-3xl font-semibold text-gray-800 mb-6 text-center">Weekly Attendance Report</h2>
 
