@@ -83,7 +83,7 @@ const Sidebar = () => {
 
       <div className="mt-auto">
         <button
-          className="w-full p-3 bg-red-600 rounded hover:bg-red-700 transition"
+          className="w-full p-3 bg-gray-400 text-black rounded hover:bg-gray-500 transition"
           onClick={handleLogout}
         >
           🚪 Logout
@@ -125,14 +125,14 @@ const Sidebar = () => {
             </div>
 
             <button
-              className="mt-8 bg-blue-600 text-white px-8 py-4 rounded-lg text-lg hover:bg-blue-700 transition shadow-lg"
+              className="mt-8 bg-black text-white px-8 py-4 rounded-lg text-lg hover:bg-gray-800 transition shadow-lg"
               onClick={handleEditEmail}
             >
               🖊 Edit Email
             </button>
 
             <button
-              className="mt-4 bg-red-600 text-white px-8 py-4 rounded-lg text-lg hover:bg-red-700 transition shadow-lg"
+              className="mt-4 bg-black text-white px-8 py-4 rounded-lg text-lg hover:bg-gray-800 transition shadow-lg"
               onClick={handleProfileModalToggle}
             >
               ✖ Close
