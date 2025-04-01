@@ -17,7 +17,10 @@ createRoot(document.getElementById('root')).render(
         <Route path="/dashboard/admin/profile" element={<AdminProfile />} />
         <Route path="/dashboard/admin/reports" element={< AdminReports/>} />
         <Route path="/dashboard/admin" element={<AdminDashboard />} />
+
         <Route path="/dashboard/admin/users" element={<AdminUsers />} />
+
+
         {/* Add more routes here */}
       </Routes>
       

@@ -20,7 +20,7 @@ function AdminDashboard() {
   return (
     <div className="flex min-h-screen bg-gray-50">
       <Sidebar />
-    
+      
 
       <main className="flex-1 p-10 bg-white shadow-xl">
         <h1 className="text-3xl mb-10 text-blue font-extrabold text-center">Admin Panel</h1>

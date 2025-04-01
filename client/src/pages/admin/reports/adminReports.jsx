@@ -1,91 +1,55 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import Sidebar from "../../../components/adminNavbar"; // Import Sidebar component
+import Sidebar from "../../../components/adminNavbar";
 
-const Reports = () => {
-  const navigate = useNavigate();
+const attendanceData = [
+  { name: "John Doe", role: "Supervisor", monday: "✔", tuesday: "✔", wednesday: "✔", thursday: "✘", friday: "✔" },
+  { name: "Jane Smith", role: "Student", monday: "✔", tuesday: "✘", wednesday: "✔", thursday: "✔", friday: "✔" },
+  { name: "Alice Brown", role: "Supervisor", monday: "✔", tuesday: "✔", wednesday: "✘", thursday: "✔", friday: "✔" },
+  { name: "Bob Johnson", role: "Student", monday: "✔", tuesday: "✔", wednesday: "✔", thursday: "✔", friday: "✘" },
+];
 
-  // Static sample data
-  const attendanceData = [
-    { name: "John Doe", role: "Supervisor", monday: "✔", tuesday: "✔", wednesday: "✔", thursday: "✘", friday: "✔" },
-    { name: "Jane Smith", role: "Student", monday: "✔", tuesday: "✘", wednesday: "✔", thursday: "✔", friday: "✔" },
-    { name: "Alice Brown", role: "Supervisor", monday: "✔", tuesday: "✔", wednesday: "✘", thursday: "✔", friday: "✔" },
-    { name: "Bob Johnson", role: "Student", monday: "✔", tuesday: "✔", wednesday: "✔", thursday: "✔", friday: "✘" },
-  ];
+const AttendanceTable = ({ title, data }) => (
+  <div className="table-container">
+    <h3 className="table-title text-lg font-bold mb-3 w-100">{title}</h3>
+    <table className="attendance-table table-bordered w-100">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Monday</th>
+          <th>Tuesday</th>
+          <th>Wednesday</th>
+          <th>Thursday</th>
+          <th>Friday</th>
+        </tr>
+      </thead>
+      <tbody>
+        {data.map((person, index) => (
+          <tr key={index}>
+            <td>{person.name}</td>
+            <td>{person.monday}</td>
+            <td>{person.tuesday}</td>
+            <td>{person.wednesday}</td>
+            <td>{person.thursday}</td>
+            <td>{person.friday}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+);
 
-  const supervisors = attendanceData.filter(person => person.role === "Supervisor");
-  const students = attendanceData.filter(person => person.role === "Student");
-
-  return (
-    <div className="flex h-screen bg-gray-100">
-      {/* Sidebar Component */}
-      <Sidebar /> {/* Imported Sidebar */}
-
-      <main className="flex-grow flex flex-col items-center justify-start p-8">
-        <div className="w-full max-w-6xl bg-white shadow-lg rounded-lg p-8">
-          <h2 className="text-3xl font-semibold text-gray-800 mb-6 text-center">Weekly Attendance Report</h2>
-
-          {/* Supervisors Table */}
-          <h3 className="text-2xl font-semibold text-gray-700 mb-4">Supervisors</h3>
-          <div className="overflow-x-auto mb-6">
-            <table className="min-w-full border border-gray-300 shadow-md rounded-lg">
-              <thead className="bg-blue-600 text-white">
-                <tr>
-                  <th className="p-4 text-left">Name</th>
-                  <th className="p-4">Monday</th>
-                  <th className="p-4">Tuesday</th>
-                  <th className="p-4">Wednesday</th>
-                  <th className="p-4">Thursday</th>
-                  <th className="p-4">Friday</th>
-                </tr>
-              </thead>
-              <tbody>
-                {supervisors.map((person, index) => (
-                  <tr key={index} className="border-b text-gray-700 hover:bg-gray-100">
-                    <td className="p-4">{person.name}</td>
-                    <td className="p-4 text-center">{person.monday}</td>
-                    <td className="p-4 text-center">{person.tuesday}</td>
-                    <td className="p-4 text-center">{person.wednesday}</td>
-                    <td className="p-4 text-center">{person.thursday}</td>
-                    <td className="p-4 text-center">{person.friday}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          {/* Students Table */}
-          <h3 className="text-2xl font-semibold text-gray-700 mb-4">Students</h3>
-          <div className="overflow-x-auto">
-            <table className="min-w-full border border-gray-300 shadow-md rounded-lg">
-              <thead className="bg-blue-600 text-white">
-                <tr>
-                  <th className="p-4 text-left">Name</th>
-                  <th className="p-4">Monday</th>
-                  <th className="p-4">Tuesday</th>
-                  <th className="p-4">Wednesday</th>
-                  <th className="p-4">Thursday</th>
-                  <th className="p-4">Friday</th>
-                </tr>
-              </thead>
-              <tbody>
-                {students.map((person, index) => (
-                  <tr key={index} className="border-b text-gray-700 hover:bg-gray-100">
-                    <td className="p-4">{person.name}</td>
-                    <td className="p-4 text-center">{person.monday}</td>
-                    <td className="p-4 text-center">{person.tuesday}</td>
-                    <td className="p-4 text-center">{person.wednesday}</td>
-                    <td className="p-4 text-center">{person.thursday}</td>
-                    <td className="p-4 text-center">{person.friday}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </main>
-    </div>
-  );
-};
+const Reports = () => (
+  <div className="d-flex vh-100">
+    <Sidebar />
+    <main className="reports-main">
+      <h2 className="report-heading">Weekly Attendance Report</h2>
+      
+      <div className="tables-wrapper">
+        <AttendanceTable title="Supervisors" data={attendanceData.filter(p => p.role === "Supervisor")} />
+        <AttendanceTable title="Students" data={attendanceData.filter(p => p.role === "Student")} />
+      </div>
+    </main>
+  </div>
+);
 
 export default Reports;

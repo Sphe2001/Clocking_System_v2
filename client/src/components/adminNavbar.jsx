@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom"; // Import useLocation to detect the active route
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Sidebar = () => {
   const navigate = useNavigate();
-  const location = useLocation(); // Get the current location (path)
+  const location = useLocation();
 
-  // Profile State
   const [profilePic, setProfilePic] = useState(localStorage.getItem("profilePic") || "/default-avatar.png");
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [username] = useState("Admin User");
@@ -37,17 +36,17 @@ const Sidebar = () => {
   };
 
   const handleLogout = () => {
-    // Show a confirmation dialog before logging out
     const isConfirmed = window.confirm("Are you sure you want to log out?");
     if (isConfirmed) {
-      navigate("/adminlogin"); // Redirect to the login page
+      navigate("/adminlogin");
     }
   };
 
   return (
-    <aside className="w-64 bg-blue-800 text-white p-6 flex flex-col">
-      <h1 className="text-2xl font-bold mb-6 text-center">ADMIN PANEL</h1>
-      <nav className="space-y-4 flex-grow">
+    <aside className="w-64 bg-blue-800 text-white h-screen p-6 fixed left-0 top-0 flex flex-col">
+      <h1 className="text-2xl font-bold text-center mb-6">ADMIN PANEL</h1>
+
+      <nav className="flex-grow">
         <div
           className={`p-3 cursor-pointer hover:bg-blue-600 rounded transition ${
             location.pathname === "/dashboard/admin" ? "bg-blue-700" : ""
@@ -72,23 +71,21 @@ const Sidebar = () => {
         >
           📊 Reports
         </div>
-        {/* Profile Button */}
+
         <button
-          className="w-full p-3 bg-transparent hover:bg-blue-600 text-blue-600 hover:text-white rounded transition"
+          className="w-full p-3 bg-transparent hover:bg-blue-600 text-blue-600 hover:text-white rounded transition mt-4"
           onClick={handleProfileModalToggle}
         >
           👤 Profile
         </button>
       </nav>
 
-      <div className="mt-auto">
-        <button
-          className="w-full p-3 bg-gray-400 text-black rounded hover:bg-gray-500 transition"
-          onClick={handleLogout}
-        >
-          🚪 Logout
-        </button>
-      </div>
+      <button
+        className="w-full p-3 bg-gray-400 text-black rounded hover:bg-gray-500 transition"
+        onClick={handleLogout}
+      >
+        🚪 Logout
+      </button>
 
       {/* Profile Modal */}
       {isProfileOpen && (
@@ -96,47 +93,48 @@ const Sidebar = () => {
           <div className="bg-white p-8 rounded-lg shadow-lg w-96">
             <h2 className="text-3xl font-semibold text-gray-800 mb-4 text-center">Admin Profile</h2>
 
-            <div className="relative w-48 h-48 mb-6 mx-auto">
-              <img
-                src={profilePic}
-                alt="Profile"
-                className="w-full h-full object-cover rounded-full border-4 border-blue-600 shadow-lg"
-              />
-              <input
-                type="file"
-                accept="image/*"
-                className="absolute inset-0 opacity-0 cursor-pointer"
-                onChange={handleProfileChange}
-              />
+            <div className="flex justify-center mb-4">
+              <label className="relative w-32 h-32">
+                <img
+                  src={profilePic}
+                  alt="Profile"
+                  className="w-full h-full object-cover rounded-full border-4 border-blue-600 shadow-lg"
+                />
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="absolute inset-0 opacity-0 cursor-pointer"
+                  onChange={handleProfileChange}
+                />
+              </label>
             </div>
             <p className="text-gray-600 text-sm text-center">Click to change profile picture</p>
 
             <div className="mt-6 bg-gray-200 p-6 rounded-lg shadow-lg">
-              <p className="text-xl font-semibold text-gray-800">{username}</p>
-              <div className="flex justify-between items-center">
-                <input
-                  type="email"
-                  value={email}
-                  onChange={handleEmailChange}
-                  className="w-full p-2 mt-2 border border-gray-300 rounded-lg"
-                  placeholder="Edit Email"
-                />
-              </div>
+              <p className="text-xl font-semibold text-black text-center">{username}</p>
+              <input
+                type="email"
+                value={email}
+                onChange={handleEmailChange}
+                className="w-full p-2 mt-2 border border-gray-300 rounded-lg text-black"
+                placeholder="Edit Email"
+              />
             </div>
 
-            <button
-              className="mt-8 bg-black text-white px-8 py-4 rounded-lg text-lg hover:bg-gray-800 transition shadow-lg"
-              onClick={handleEditEmail}
-            >
-              🖊 Edit Email
-            </button>
-
-            <button
-              className="mt-4 bg-black text-white px-8 py-4 rounded-lg text-lg hover:bg-gray-800 transition shadow-lg"
-              onClick={handleProfileModalToggle}
-            >
-              ✖ Close
-            </button>
+            <div className="flex justify-between mt-6">
+              <button
+                className="bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-800 transition"
+                onClick={handleEditEmail}
+              >
+                🖊 Edit Email
+              </button>
+              <button
+                className="bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-800 transition"
+                onClick={handleProfileModalToggle}
+              >
+                ✖ Close
+              </button>
+            </div>
           </div>
         </div>
       )}
