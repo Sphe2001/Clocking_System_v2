@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 const sequelize = require("./src/helpers/dbConfig");
 const authRoutes = require("./src/routes/auth/authRoutes");
 const clockin = require("./src/routes/student/clock_in");
+const earlyLeave = require("./src/routes/student/studentRequest/earlyLeave")
 
 
 const app = express();
@@ -15,6 +16,7 @@ app.use(express.json());
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api", clockin)
+app.use("/api", earlyLeave);
 
 // Test database connection
 sequelize
