@@ -21,7 +21,7 @@ function AdminDashboard() {
     <div className="flex min-h-screen bg-gray-50">
       <Sidebar />
       
-      <main className="flex-1 p-10 bg-white shadow-xl">
+      <main className="flex-1 p-10 bg-white shadow-xl ml-50">
         <h1 className="text-3xl mb-10 text-blue font-extrabold text-center">Admin Panel</h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
