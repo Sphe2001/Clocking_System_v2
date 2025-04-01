@@ -1,9 +1,9 @@
 const express = require("express");
-const SupervisorAttendance = require("../../models/supervisorAttendance"); // Ensure this model is set up correctly
-const dotenv = require("dotenv");
-const cookieParser = require("cookie-parser"); // Import cookie-parser
-const getDataFromToken = require("../../helpers/getUserId");
 const { Op } = require("sequelize");
+const StudentAttendance = require("../../models/studentAttendance");
+const dotenv = require("dotenv");
+const cookieParser = require("cookie-parser");
+const getDataFromToken = require("../../helpers/getUserId");
 
 const router = express.Router();
 dotenv.config();
@@ -24,64 +24,56 @@ const formatDate = (date) => {
   return `${day} ${month} ${year} ${hours}:${minutes}`;
 };
 
-// POST /supervisor/clock-in route
+// POST /clock-in route
 router.post("/clock-in", async (req, res) => {
   try {
-    // Extract supervisor's userId from the token
-    const supervisorId = getDataFromToken(req);
-    console.log(supervisorId);
+    // Extract userId from token
+    const userId = getDataFromToken(req);
+    console.log(userId);
 
-    // If supervisorId is not found, send an error response
-    if (!supervisorId) {
-      return res.status(400).json({ error: "Supervisor not found" });
+    if (!userId) {
+      return res.status(400).json({ error: "User not found" });
     }
 
-    // Get the current date and time in 'dd Mon yyyy hh:mm' format
-    const today = new Date();
-    const formattedClockIn = formatDate(today); // Format the clock-in date
+    const currentDate = new Date();
+    const formattedDate = formatDate(currentDate); // Format current date
 
-    // Get the current date in 'YYYY-MM-DD' format for the clock-in validation
-    const currentDate = today.toISOString().split('T')[0]; // For comparing date only, e.g., '2025-04-01'
-
-    // Check if the supervisor has already clocked in today
-    const existingClockIn = await SupervisorAttendance.findOne({
+    // Check if the student has already clocked in today
+    const existingClockIn = await StudentAttendance.findOne({
       where: {
-        staffNo: supervisorId, // Look for a record with the same supervisor number
+        studentNo: userId,
         clock_in: {
-          [Op.gte]: new Date(`${currentDate}T00:00:00Z`), // Start of the day
-          [Op.lt]: new Date(`${currentDate}T23:59:59Z`), // End of the day
+          [Op.gte]: new Date(`${formattedDate}T00:00:00Z`),
+          [Op.lt]: new Date(`${formattedDate}T23:59:59Z`),
         },
       },
     });
 
-    // If a clock-in record exists for today, return an error
-    if (existingClockIn) {
-      return res.status(400).json({ error: "You have already clocked in today" });
-    }
+    // if (existingClockIn) {
+    //   return res.status(400).json({ error: "You have already clocked in today" });
+    // }
 
     // Create a new attendance record (clock-in)
-    const attendanceRecord = await SupervisorAttendance.create({
-      staffNo: supervisorId, // Assuming supervisorId corresponds to staffNo
-      clock_in: formattedClockIn, // Store the formatted clock-in time as a string
+    const attendanceRecord = await StudentAttendance.create({
+      studentNo: userId,
+      clock_in: currentDate, // Set the current timestamp for clock-in
     });
 
     return res.json({
-      message: `Clock-in successful at ${formattedClockIn}`,
+      message: "Clock-in successful",
       success: true,
-      attendanceRecord, // Return the created attendance record
+      attendanceRecord,
     });
   } catch (error) {
     console.error("Error in clock-in:", error);
 
-    // Check if the error is a validation error (Sequelize ValidationError)
     if (error.name === "SequelizeValidationError") {
       return res.status(400).json({
         error: "Validation Error",
-        details: error.errors.map((e) => e.message), // Provide details of the validation error
+        details: error.errors.map((e) => e.message),
       });
     }
 
-    // Generic server error response
     return res.status(500).json({
       error: error.message || "Internal Server Error",
     });
