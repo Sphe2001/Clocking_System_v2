@@ -49,9 +49,9 @@ router.post("/clock-in", async (req, res) => {
       },
     });
 
-    // if (existingClockIn) {
-    //   return res.status(400).json({ error: "You have already clocked in today" });
-    // }
+    if (existingClockIn) {
+      return res.status(400).json({ error: "You have already clocked in today" });
+    }
 
     // Create a new attendance record (clock-in)
     const attendanceRecord = await StudentAttendance.create({
