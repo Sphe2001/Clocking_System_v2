@@ -7,6 +7,7 @@ const router = express.Router();
 router.post("/register/admin", async (req, res) => {
   try {
     const { staffNo, email, surname, initials, password } = req.body;
+    console.log(email);
 
     if (!/^\d{6}$/.test(staffNo)) {
       return res
