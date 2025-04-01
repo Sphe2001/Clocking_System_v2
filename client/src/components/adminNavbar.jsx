@@ -56,6 +56,7 @@ const Sidebar = ({ setProfileModalState }) => { // Accepting a prop to control t
         >
           🏠 Dashboard
         </div>
+        
         <div
           className={`p-3 cursor-pointer hover:bg-blue-600 rounded transition ${
             location.pathname === "/dashboard/admin/users" ? "bg-blue-700" : ""

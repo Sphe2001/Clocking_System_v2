@@ -54,7 +54,7 @@ function AdminDashboard() {
         {/* Make table container larger and add scroll */}
         <div className="overflow-x-auto max-h-96 shadow-lg rounded-xl bg-white">
           <table className="w-full table-auto border-collapse border border-gray-300">
-            <thead className="bg-blue-100 sticky top-0">
+            <thead className="bg-blue-100  top-0">
               <tr className="text-sm text-gray-700">
                 <th className="p-6 border-b">Username</th>
                 <th className="p-6 border-b">Surname</th>
