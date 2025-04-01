@@ -7,6 +7,9 @@ import AdminProfile from './pages/admin/profile/adminProfile.jsx';
 import AdminReports from './pages/admin/reports/adminReports.jsx';
 import AdminDashboard from './pages/admin/adminDashboard.jsx'; // ✅ Import AdminDashboard
 import AdminUsers from './pages/admin/users/adminUsers.jsx';
+import StudentDashboard from './pages/student/studentDashboard.jsx'
+import ViewProfile from './pages/student/viewProfile/viewProfile.jsx';
+
 
 
 createRoot(document.getElementById('root')).render(
@@ -19,7 +22,9 @@ createRoot(document.getElementById('root')).render(
         <Route path="/dashboard/admin" element={<AdminDashboard />} />
 
         <Route path="/dashboard/admin/users" element={<AdminUsers />} />
-
+        <Route path="/pages/student" element={<StudentDashboard />} />
+        <Route path="/pages/student/viewProfile" element={<ViewProfile />} />
+        
 
         {/* Add more routes here */}
       </Routes>
