@@ -12,7 +12,7 @@ const ViewProfile = () => {
       <div className="flex flex-col items-center justify-center flex-grow pt-20 text-white px-6 sm:px-8 md:px-12">
         <div className="relative z-10 max-w-lg w-full text-center space-y-6 p-8 bg-gradient-to-b from-white to-blue-400 bg-opacity-10 backdrop-blur-md rounded-lg shadow-lg">
           <h1 className="text-4xl sm:text-5xl font-extrabold text-black">Your Profile</h1>
-          <p className="text-lg sm:text-xl text-black">Name: John Doe</p>
+          <p className="text-lg sm:text-xl text-black">Name: mark Doe</p>
           <p className="text-lg sm:text-xl text-black">Email: johndoe@example.com</p>
           <p className="text-lg sm:text-xl text-black">Student ID: 123456</p>
         </div>
