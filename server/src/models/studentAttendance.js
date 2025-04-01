@@ -11,11 +11,11 @@ const StudentAttendance = sequelize.define(
     },
     studentNo: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
     clock_in: {
       type: DataTypes.DATE,
-      allowNull: false,
+      allowNull: true,
     },
     clock_out: {
       type: DataTypes.DATE,

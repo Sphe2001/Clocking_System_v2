@@ -7,6 +7,7 @@ const router = express.Router();
 router.post("/register/admin", async (req, res) => {
   try {
     const { staffNo, email, surname, initials, password } = req.body;
+    console.log(email);
 
     if (!/^\d{6}$/.test(staffNo)) {
       return res
@@ -70,6 +71,7 @@ router.post("/register/admin", async (req, res) => {
       initials,
       password: hashedPassword,
       isVerified: true,
+      isPasswordResetVerified: false,
     });
 
     res.status(201).json({ message: "Admin registered successfully", admin });
