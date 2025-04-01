@@ -9,6 +9,8 @@ import AdminDashboard from './pages/admin/adminDashboard.jsx'; // ✅ Import Adm
 import AdminUsers from './pages/admin/users/adminUsers.jsx';
 import StudentDashboard from './pages/student/studentDashboard.jsx'
 import ViewProfile from './pages/student/viewProfile/viewProfile.jsx';
+import LoginPage from './pages/auth/login.jsx';
+import SignUpPage from './pages/auth/signUp.jsx';
 
 
 
@@ -17,6 +19,8 @@ createRoot(document.getElementById('root')).render(
     <BrowserRouter>
       <Routes> {/* ✅ Wrap routes inside <Routes> */}
         <Route path="/" element={<App />} />
+        <Route path="/login" element={<LoginPage/>} />
+        <Route path="/signup" element={<SignUpPage/>} />
         <Route path="/dashboard/admin/profile" element={<AdminProfile />} />
         <Route path="/dashboard/admin/reports" element={< AdminReports/>} />
         <Route path="/dashboard/admin" element={<AdminDashboard />} />
