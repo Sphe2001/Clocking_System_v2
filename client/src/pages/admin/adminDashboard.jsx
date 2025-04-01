@@ -21,7 +21,6 @@ function AdminDashboard() {
     <div className="flex min-h-screen bg-gray-50">
       <Sidebar />
       
-
       <main className="flex-1 p-10 bg-white shadow-xl">
         <h1 className="text-3xl mb-10 text-blue font-extrabold text-center">Admin Panel</h1>
 
@@ -52,30 +51,31 @@ function AdminDashboard() {
           </select>
         </div>
 
-            <div className="overflow-y-auto max-h-60 shadow-lg rounded-xl bg-white">
-      <table className="w-full table-auto border-collapse border border-gray-300">
-        <thead className="bg-blue-100 sticky top-0">
-          <tr className="text-sm text-gray-700">
-            <th className="p-4 border-b">Username</th>
-            <th className="p-4 border-b">Surname</th>
-            <th className="p-4 border-b">Role</th>
-            <th className="p-4 border-b">Clock In</th>
-            <th className="p-4 border-b">Clock Out</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredData.map((user, index) => (
-            <tr key={index} className="text-sm text-gray-700">
-              <td className="p-4 border-b">{user.username}</td>
-              <td className="p-4 border-b">{user.surname}</td>
-              <td className="p-4 border-b">{user.role}</td>
-              <td className="p-4 border-b">{user.clockIn}</td>
-              <td className="p-4 border-b">{user.clockOut}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+        {/* Make table container larger and add scroll */}
+        <div className="overflow-x-auto max-h-96 shadow-lg rounded-xl bg-white">
+          <table className="w-full table-auto border-collapse border border-gray-300">
+            <thead className="bg-blue-100 sticky top-0">
+              <tr className="text-sm text-gray-700">
+                <th className="p-6 border-b">Username</th>
+                <th className="p-6 border-b">Surname</th>
+                <th className="p-6 border-b">Role</th>
+                <th className="p-6 border-b">Clock In</th>
+                <th className="p-6 border-b">Clock Out</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredData.map((user, index) => (
+                <tr key={index} className="text-sm text-gray-700">
+                  <td className="p-6 border-b">{user.username}</td>
+                  <td className="p-6 border-b">{user.surname}</td>
+                  <td className="p-6 border-b">{user.role}</td>
+                  <td className="p-6 border-b">{user.clockIn}</td>
+                  <td className="p-6 border-b">{user.clockOut}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </main>
     </div>
   );
