@@ -91,7 +91,7 @@ const Sidebar = ({ setProfileModalState }) => { // Accepting a prop to control t
       {/* Profile Modal */}
       {isProfileOpen && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50">
-          <div className="bg-white p-8 rounded-lg shadow-lg w-96">
+          <div className="bg-white p-8 rounded-lg transparent w-96">
             <h2 className="text-3xl font-semibold text-gray-800 mb-4 text-center">Admin Profile</h2>
 
             <div className="flex justify-center mb-4">
@@ -124,13 +124,13 @@ const Sidebar = ({ setProfileModalState }) => { // Accepting a prop to control t
 
             <div className="flex justify-between mt-6">
               <button
-                className="bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-800 transition"
+                className="bg-white text-black px-6 py-2 rounded-lg hover:bg-gray-800 transition"
                 onClick={handleEditEmail}
               >
                 🖊 Edit Email
               </button>
               <button
-                className="bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-800 transition"
+                className="bg-white text-black px-6 py-2 rounded-lg hover:bg-gray-800 transition"
                 onClick={handleProfileModalToggle}
               >
                 ✖ Close
