@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
-const Sidebar = () => {
+const Sidebar = ({ setProfileModalState }) => { // Accepting a prop to control the state in parent component
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -33,6 +33,7 @@ const Sidebar = () => {
 
   const handleProfileModalToggle = () => {
     setIsProfileOpen(!isProfileOpen);
+    setProfileModalState(!isProfileOpen); // Pass the state up to parent
   };
 
   const handleLogout = () => {
