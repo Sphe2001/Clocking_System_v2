@@ -1,38 +1,34 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter, Routes, Route } from 'react-router-dom'; // ✅ Import Routes and Route
+import { BrowserRouter, Routes, Route } from 'react-router-dom'; 
+import { AnimatePresence } from 'framer-motion'; // Import AnimatePresence
 import './index.css';
 import App from './App.jsx';
 import AdminProfile from './pages/admin/profile/adminProfile.jsx';
 import AdminReports from './pages/admin/reports/adminReports.jsx';
-import AdminDashboard from './pages/admin/adminDashboard.jsx'; // ✅ Import AdminDashboard
+import AdminDashboard from './pages/admin/adminDashboard.jsx'; 
 import AdminUsers from './pages/admin/users/adminUsers.jsx';
 import StudentDashboard from './pages/student/studentDashboard.jsx'
 import ViewProfile from './pages/student/viewProfile/viewProfile.jsx';
 import LoginPage from './pages/auth/login.jsx';
 import SignUpPage from './pages/auth/signUp.jsx';
 
-
-
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
-      <Routes> {/* ✅ Wrap routes inside <Routes> */}
-        <Route path="/" element={<App />} />
-        <Route path="/login" element={<LoginPage/>} />
-        <Route path="/signup" element={<SignUpPage/>} />
-        <Route path="/dashboard/admin/profile" element={<AdminProfile />} />
-        <Route path="/dashboard/admin/reports" element={< AdminReports/>} />
-        <Route path="/dashboard/admin" element={<AdminDashboard />} />
-
-        <Route path="/dashboard/admin/users" element={<AdminUsers />} />
-        <Route path="/pages/student" element={<StudentDashboard />} />
-        <Route path="/pages/student/viewProfile" element={<ViewProfile />} />
-        
-
-        {/* Add more routes here */}
-      </Routes>
-      
+      <AnimatePresence mode="wait"> {/* Animate presence ensures smooth transitions */}
+        <Routes> 
+          <Route path="/" element={<App />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/dashboard/admin/profile" element={<AdminProfile />} />
+          <Route path="/dashboard/admin/reports" element={<AdminReports />} />
+          <Route path="/dashboard/admin" element={<AdminDashboard />} />
+          <Route path="/dashboard/admin/users" element={<AdminUsers />} />
+          <Route path="/pages/student" element={<StudentDashboard />} />
+          <Route path="/pages/student/viewProfile" element={<ViewProfile />} />
+        </Routes>
+      </AnimatePresence>
     </BrowserRouter>
   </StrictMode>
 );

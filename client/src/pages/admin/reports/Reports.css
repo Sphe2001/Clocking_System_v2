@@ -1,0 +1,23 @@
+/* Reports.css */
+.page-turn-enter {
+    opacity: 0;
+    transform: rotateY(90deg);
+  }
+  
+  .page-turn-enter-active {
+    opacity: 1;
+    transform: rotateY(0);
+    transition: opacity 500ms, transform 500ms;
+  }
+  
+  .page-turn-exit {
+    opacity: 1;
+    transform: rotateY(0);
+  }
+  
+  .page-turn-exit-active {
+    opacity: 0;
+    transform: rotateY(90deg);
+    transition: opacity 500ms, transform 500ms;
+  }
+  

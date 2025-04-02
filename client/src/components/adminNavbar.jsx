@@ -49,8 +49,8 @@ const Sidebar = ({ setProfileModalState }) => { // Accepting a prop to control t
 
       <nav className="flex-grow">
         <div
-          className={`p-3 cursor-pointer hover:bg-blue-600 rounded transition ${
-            location.pathname === "/dashboard/admin" ? "bg-blue-700" : ""
+          className={`p-3 cursor-pointer rounded transition-colors duration-300 ${
+            location.pathname === "/dashboard/admin" ? "bg-blue-700" : "hover:bg-blue-600"
           }`}
           onClick={() => navigate("/dashboard/admin")}
         >
@@ -58,16 +58,16 @@ const Sidebar = ({ setProfileModalState }) => { // Accepting a prop to control t
         </div>
         
         <div
-          className={`p-3 cursor-pointer hover:bg-blue-600 rounded transition ${
-            location.pathname === "/dashboard/admin/users" ? "bg-blue-700" : ""
+          className={`p-3 cursor-pointer rounded transition-colors duration-300 ${
+            location.pathname === "/dashboard/admin/users" ? "bg-blue-700" : "hover:bg-blue-600"
           }`}
           onClick={() => navigate("/dashboard/admin/users")}
         >
           👥 Users
         </div>
         <div
-          className={`p-3 cursor-pointer hover:bg-blue-600 rounded transition ${
-            location.pathname === "/dashboard/admin/reports" ? "bg-blue-700" : ""
+          className={`p-3 cursor-pointer rounded transition-colors duration-300 ${
+            location.pathname === "/dashboard/admin/reports" ? "bg-blue-700" : "hover:bg-blue-600"
           }`}
           onClick={() => navigate("/dashboard/admin/reports")}
         >
@@ -75,7 +75,7 @@ const Sidebar = ({ setProfileModalState }) => { // Accepting a prop to control t
         </div>
 
         <button
-          className="w-full p-3 bg-transparent hover:bg-blue-600 text-blue-600 hover:text-white rounded transition mt-4"
+          className="w-full p-3 bg-transparent hover:bg-blue-600 text-blue-600 hover:text-white rounded transition-colors duration-300 mt-4"
           onClick={handleProfileModalToggle}
         >
           👤 Profile
@@ -83,7 +83,7 @@ const Sidebar = ({ setProfileModalState }) => { // Accepting a prop to control t
       </nav>
 
       <button
-        className="w-full p-3 bg-gray-400 text-black rounded hover:bg-gray-500 transition"
+        className="w-full p-3 bg-gray-400 text-black rounded hover:bg-gray-500 transition-colors duration-300"
         onClick={handleLogout}
       >
         🚪 Logout

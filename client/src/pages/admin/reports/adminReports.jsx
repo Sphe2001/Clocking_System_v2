@@ -1,19 +1,15 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion"; // Import motion for transitions
 import Sidebar from "../../../components/adminNavbar";
-
-const attendanceData = [
-  { name: "John Doe", role: "Supervisor", monday: "✔", tuesday: "✔", wednesday: "✔", thursday: "✘", friday: "✔" },
-  { name: "Jane Smith", role: "Student", monday: "✔", tuesday: "✘", wednesday: "✔", thursday: "✔", friday: "✔" },
-  { name: "Alice Brown", role: "Supervisor", monday: "✔", tuesday: "✔", wednesday: "✘", thursday: "✔", friday: "✔" },
-  { name: "Bob Johnson", role: "Student", monday: "✔", tuesday: "✔", wednesday: "✔", thursday: "✔", friday: "✘" },
-];
+import { CSSTransition } from "react-transition-group"; // Import CSSTransition
+import "./Reports.css"; // Make sure to import your custom CSS for transitions
 
 const AttendanceTable = ({ title, data, isProfileOpen }) => (
   <div className="table-container mb-8">
     <h3 className="table-title text-lg font-bold mb-3">{title}</h3>
     <div className="overflow-y-auto shadow-lg rounded-xl bg-white">
       <table className="w-full table-auto border-collapse border border-gray-300">
-        <thead className={`bg-blue-600 text-white  top-0 ${isProfileOpen ? "hidden" : ""}`}>
+        <thead className={`bg-blue-600 text-white top-0 ${isProfileOpen ? "hidden" : ""}`}>
           <tr className="text-sm text-gray-100">
             <th className="p-4 border-b text-left">Name</th>
             <th className="p-4 border-b text-center">Monday</th>
@@ -27,11 +23,11 @@ const AttendanceTable = ({ title, data, isProfileOpen }) => (
           {data.map((person, index) => (
             <tr key={index} className="text-sm text-gray-700">
               <td className="p-4 border-b">{person.name}</td>
-              <td className="p-4 border-b text-center">{person.monday}</td>
-              <td className="p-4 border-b text-center">{person.tuesday}</td>
-              <td className="p-4 border-b text-center">{person.wednesday}</td>
-              <td className="p-4 border-b text-center">{person.thursday}</td>
-              <td className="p-4 border-b text-center">{person.friday}</td>
+              <td className="p-4 border-b text-center">{person.monday || "-"}</td>
+              <td className="p-4 border-b text-center">{person.tuesday || "-"}</td>
+              <td className="p-4 border-b text-center">{person.wednesday || "-"}</td>
+              <td className="p-4 border-b text-center">{person.thursday || "-"}</td>
+              <td className="p-4 border-b text-center">{person.friday || "-"}</td>
             </tr>
           ))}
         </tbody>
@@ -40,18 +36,74 @@ const AttendanceTable = ({ title, data, isProfileOpen }) => (
   </div>
 );
 
-const Reports = ({ isProfileOpen }) => (
-  <div className="d-flex vh-100">
-    <Sidebar setProfileModalState={() => {}} />
-    <main className="reports-main flex-1 p-10 bg-white shadow-xl">
-      <h2 className="report-heading text-3xl mb-10 text-blue font-extrabold text-center">Weekly Attendance Report</h2>
-      
-      <div className="tables-wrapper">
-        <AttendanceTable title="Supervisors" data={attendanceData.filter(p => p.role === "Supervisor")} isProfileOpen={isProfileOpen} />
-        <AttendanceTable title="Students" data={attendanceData.filter(p => p.role === "Student")} isProfileOpen={isProfileOpen} />
-      </div>
-    </main>
-  </div>
-);
+const Reports = ({ isProfileOpen }) => {
+  const [supervisors, setSupervisors] = useState([]);
+  const [students, setStudents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [supervisorRes, studentRes] = await Promise.all([
+          fetch("http://localhost:3001/api/admin/fetchAllSupervisorUsers"),
+          fetch("http://localhost:3001/api/admin/fetchAllStudentUsers"),
+        ]);
+
+        if (!supervisorRes.ok || !studentRes.ok) {
+          throw new Error("Failed to fetch attendance data");
+        }
+
+        const supervisorsData = await supervisorRes.json();
+        const studentsData = await studentRes.json();
+
+        setSupervisors(supervisorsData);
+        setStudents(studentsData);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  return (
+    <motion.div
+      className="d-flex vh-100"
+      initial={{ opacity: 0 }} // Start with opacity 0
+      animate={{ opacity: 1 }} // End with opacity 1
+      exit={{ opacity: 0 }} // Fade out on exit
+      transition={{ duration: 0.5 }} // Transition duration
+    >
+      <Sidebar setProfileModalState={() => {}} />
+      <main className="reports-main flex-1 p-10 bg-white shadow-xl">
+        <CSSTransition
+          in={!isProfileOpen} // Trigger animation when the profile is not open
+          timeout={500}
+          classNames="page-turn"
+          unmountOnExit
+        >
+          <div>
+            <h2 className="report-heading text-3xl mb-10 text-blue font-extrabold text-center">
+              Weekly Attendance Report
+            </h2>
+            {loading ? (
+              <p className="text-center text-gray-600">Loading...</p>
+            ) : error ? (
+              <p className="text-center text-red-600">{error}</p>
+            ) : (
+              <div className="tables-wrapper">
+                <AttendanceTable title="Supervisors" data={supervisors} isProfileOpen={isProfileOpen} />
+                <AttendanceTable title="Students" data={students} isProfileOpen={isProfileOpen} />
+              </div>
+            )}
+          </div>
+        </CSSTransition>
+      </main>
+    </motion.div>
+  );
+};
 
 export default Reports;

@@ -20,8 +20,8 @@ app.use(cors());
 app.use("/api/auth", authRoutes);
 app.use("/api", clockin)
 app.use("/api", earlyLeave);
-app.use("/api/admin", usersRoutes);
-app.use("/api/admin", supervisorUsersRoutes);
+app.use("/api/admin/fetchAllStudentUsers", usersRoutes);
+app.use("/api/admin/fetchAllSupervisorUsers", supervisorUsersRoutes);
 
 
 

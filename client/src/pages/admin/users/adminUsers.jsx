@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion"; // Import motion for transitions
 import Sidebar from "../../../components/adminNavbar";
 
 function AllUsers() {
-  const [filter, setFilter] = useState("All"); // State for the role filter
-  const [searchQuery, setSearchQuery] = useState(""); // State for search query
-  const [users, setUsers] = useState([]); // State for users data
-  const [supervisors, setSupervisors] = useState([]); // State for supervisor data
-  const [loading, setLoading] = useState(true); // State to manage loading
+  const [filter, setFilter] = useState("All");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [users, setUsers] = useState([]);
+  const [supervisors, setSupervisors] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Fetch users data when the component mounts
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:3001/api/admin/users");
+        const response = await fetch("http://localhost:3001/api/admin/fetchAllStudentUsers");
         const data = await response.json();
-        setUsers(data); // Store users data in state
-        setLoading(false); // Set loading to false when data is fetched
+        setUsers(data);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching users:", error);
         setLoading(false);
@@ -24,13 +24,12 @@ function AllUsers() {
     fetchData();
   }, []);
 
-  // Fetch supervisors data when the component mounts
   useEffect(() => {
     const fetchSupervisors = async () => {
       try {
-        const response = await fetch("http://localhost:3001/api/admin/supervisorUsers");
+        const response = await fetch("http://localhost:3001/api/admin/fetchAllSupervisorUsers");
         const data = await response.json();
-        setSupervisors(data); // Set supervisors data to state
+        setSupervisors(data);
       } catch (error) {
         console.error("Error fetching supervisors:", error);
       }
@@ -38,7 +37,6 @@ function AllUsers() {
     fetchSupervisors();
   }, []);
 
-  // Filter users based on selected role and search query
   const filteredUsers = users.filter((user) => {
     const userRole = user.role ? user.role.trim().toLowerCase() : "";
     const selectedRole = filter.toLowerCase();
@@ -48,16 +46,15 @@ function AllUsers() {
       return (
         user.surname.toLowerCase().includes(searchText) || 
         user.studentNo.toString().includes(searchText)
-      ); // Show all users with search filter
+      );
     }
     return (
       userRole === selectedRole &&
       (user.surname.toLowerCase().includes(searchText) || 
       user.studentNo.toString().includes(searchText))
-    ); // Filter based on role and search query
+    );
   });
 
-  // Filter supervisors based on selected role and search query
   const filteredSupervisors = supervisors.filter((supervisor) => {
     const supervisorRole = supervisor.role ? supervisor.role.trim().toLowerCase() : "";
     const selectedRole = filter.toLowerCase();
@@ -67,17 +64,23 @@ function AllUsers() {
       return (
         supervisor.surname.toLowerCase().includes(searchText) || 
         supervisor.staffNo.toString().includes(searchText)
-      ); // Show all supervisors with search filter
+      );
     }
     return (
       supervisorRole === selectedRole &&
       (supervisor.surname.toLowerCase().includes(searchText) || 
       supervisor.staffNo.toString().includes(searchText))
-    ); // Filter based on role and search query
+    );
   });
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <motion.div
+      className="flex min-h-screen bg-gray-50"
+      initial={{ opacity: 0 }} // Start with opacity 0
+      animate={{ opacity: 1 }} // End with opacity 1
+      exit={{ opacity: 0 }} // Fade out on exit
+      transition={{ duration: 0.5 }} // Transition duration
+    >
       <Sidebar />
 
       <main className="flex-1 p-10 bg-white shadow-xl w-full ml-40">
@@ -88,12 +91,12 @@ function AllUsers() {
           <label className="font-semibold mr-2">Filter by role:</label>
           <select
             value={filter}
-            onChange={(e) => setFilter(e.target.value)} // Update filter state on change
+            onChange={(e) => setFilter(e.target.value)}
             className="border p-2 rounded"
           >
             <option value="All">All</option>
-            <option value="Student">student</option>
-            <option value="Supervisor">Supervisors</option>
+            <option value="Student">Student</option>
+            <option value="Supervisor">Supervisor</option>
           </select>
         </div>
 
@@ -103,7 +106,7 @@ function AllUsers() {
           <input
             type="text"
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)} // Update search query on change
+            onChange={(e) => setSearchQuery(e.target.value)}
             className="border p-2 rounded w-1/4"
             placeholder="Enter surname or student/staff number"
           />
@@ -187,7 +190,7 @@ function AllUsers() {
           </div>
         )}
       </main>
-    </div>
+    </motion.div>
   );
 }
 
