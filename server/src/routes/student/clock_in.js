@@ -9,19 +9,11 @@ const router = express.Router();
 dotenv.config();
 router.use(cookieParser());
 
-// Helper function to get the current date in 'dd Mon yyyy hh:mm' format
-const formatDate = (date) => {
-  const months = [
-    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-  ];
-  
-  const day = String(date.getDate()).padStart(2, '0');
-  const month = months[date.getMonth()];
-  const year = date.getFullYear();
+// Helper function to get the current time in 'hh:mm' format
+const formatTime = (date) => {
   const hours = String(date.getHours()).padStart(2, '0');
   const minutes = String(date.getMinutes()).padStart(2, '0');
-
-  return `${day} ${month} ${year} ${hours}:${minutes}`;
+  return `${hours}:${minutes}`;
 };
 
 // POST /clock-in route
@@ -36,33 +28,33 @@ router.post("/clock-in", async (req, res) => {
     }
 
     const currentDate = new Date();
-    const formattedDate = formatDate(currentDate); // Format current date
+    const formattedTime = formatTime(currentDate); // Format current time to 'hh:mm'
 
     // Check if the student has already clocked in today
     const existingClockIn = await StudentAttendance.findOne({
       where: {
         studentNo: userId,
         clock_in: {
-          [Op.gte]: new Date(`${formattedDate}T00:00:00Z`),
-          [Op.lt]: new Date(`${formattedDate}T23:59:59Z`),
+          [Op.gte]: new Date(`${currentDate.toISOString().split('T')[0]}T00:00:00Z`), // start of the day
+          [Op.lt]: new Date(`${currentDate.toISOString().split('T')[0]}T23:59:59Z`), // end of the day
         },
       },
     });
 
-    if (existingClockIn) {
+     if (existingClockIn) {
       return res.status(400).json({ error: "You have already clocked in today" });
-    }
+     }
 
     // Create a new attendance record (clock-in)
     const attendanceRecord = await StudentAttendance.create({
       studentNo: userId,
-      clock_in: currentDate, // Set the current timestamp for clock-in
+      clock_in: currentDate, // Set the full timestamp for clock-in
     });
 
     return res.json({
       message: "Clock-in successful",
       success: true,
-      attendanceRecord,
+      time: formattedTime, // Return only the time part in the response
     });
   } catch (error) {
     console.error("Error in clock-in:", error);
