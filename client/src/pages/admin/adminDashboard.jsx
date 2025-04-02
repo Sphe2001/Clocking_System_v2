@@ -51,12 +51,12 @@ function AdminDashboard() {
     <div className="flex min-h-screen bg-gray-50">
       <Sidebar />
       <motion.main 
-        className="flex-1 p-10 bg-white shadow-xl ml-50"
+        className="flex-1 p-10 bg-white shadow-xl ml-64 flex flex-col items-center justify-center"
         initial={{ opacity: 0 }} 
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
       >
-        <h1 className="text-3xl mb-10 text-blue font-extrabold text-center">Admin Panel</h1>
+        <h1 className="text-3xl mb-10 text-blue-800 font-extrabold text-center">Admin Panel</h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           <motion.div 
@@ -78,7 +78,7 @@ function AdminDashboard() {
             animate={{ scale: 1 }}
             transition={{ duration: 0.6 }}
           >
-            <h3 className="text-lg font-semibold text-center mb-2">Total Attendance (Students vs Supervisors) - Today</h3>
+            <h3 className="text-lg font-semibold text-center mb-2">Total Attendance - Today</h3>
             <div className="flex justify-between text-lg font-semibold text-gray-800">
               <span>Students: {totalStudents}</span>
               <span>Supervisors: {totalSupervisors}</span>
@@ -106,7 +106,7 @@ function AdminDashboard() {
           </motion.p>
         ) : (
           <motion.div 
-            className="overflow-x-auto max-h-96 shadow-lg rounded-xl bg-white"
+            className="overflow-x-auto max-h-96 shadow-lg rounded-xl bg-white w-full"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8 }}
@@ -130,11 +130,11 @@ function AdminDashboard() {
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
                   >
-                    <td className="p-6 border-b">{user.username}</td>
-                    <td className="p-6 border-b">{user.surname}</td>
-                    <td className="p-6 border-b">{user.role}</td>
-                    <td className="p-6 border-b">{user.clockIn}</td>
-                    <td className="p-6 border-b">{user.clockOut}</td>
+                    <td className="p-6 border-b text-center">{user.username}</td>
+                    <td className="p-6 border-b text-center">{user.surname}</td>
+                    <td className="p-6 border-b text-center">{user.role}</td>
+                    <td className="p-6 border-b text-center">{user.clockIn}</td>
+                    <td className="p-6 border-b text-center">{user.clockOut}</td>
                   </motion.tr>
                 ))}
               </tbody>

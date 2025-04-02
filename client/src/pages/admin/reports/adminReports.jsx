@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion"; // Import motion for transitions
 import Sidebar from "../../../components/adminNavbar";
-import { CSSTransition } from "react-transition-group"; // Import CSSTransition
-import "./Reports.css"; // Make sure to import your custom CSS for transitions
 
 const AttendanceTable = ({ title, data, isProfileOpen }) => (
   <div className="table-container mb-8">
-    <h3 className="table-title text-lg font-bold mb-3">{title}</h3>
+    <h3 className="table-title text-lg font-bold mb-3 text-center">{title}</h3>
     <div className="overflow-y-auto shadow-lg rounded-xl bg-white">
       <table className="w-full table-auto border-collapse border border-gray-300">
         <thead className={`bg-blue-600 text-white top-0 ${isProfileOpen ? "hidden" : ""}`}>
@@ -71,36 +69,25 @@ const Reports = ({ isProfileOpen }) => {
 
   return (
     <motion.div
-      className="d-flex vh-100"
-      initial={{ opacity: 0 }} // Start with opacity 0
-      animate={{ opacity: 1 }} // End with opacity 1
-      exit={{ opacity: 0 }} // Fade out on exit
-      transition={{ duration: 0.5 }} // Transition duration
+      className="flex min-h-screen bg-gray-50"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
     >
       <Sidebar setProfileModalState={() => {}} />
-      <main className="reports-main flex-1 p-10 bg-white shadow-xl">
-        <CSSTransition
-          in={!isProfileOpen} // Trigger animation when the profile is not open
-          timeout={500}
-          classNames="page-turn"
-          unmountOnExit
-        >
-          <div>
-            <h2 className="report-heading text-3xl mb-10 text-blue font-extrabold text-center">
-              Weekly Attendance Report
-            </h2>
-            {loading ? (
-              <p className="text-center text-gray-600">Loading...</p>
-            ) : error ? (
-              <p className="text-center text-red-600">{error}</p>
-            ) : (
-              <div className="tables-wrapper">
-                <AttendanceTable title="Supervisors" data={supervisors} isProfileOpen={isProfileOpen} />
-                <AttendanceTable title="Students" data={students} isProfileOpen={isProfileOpen} />
-              </div>
-            )}
+      <main className="reports-main flex-1 p-10 bg-white shadow-xl mx-auto w-3/4 text-center">
+        <h2 className="report-heading text-3xl mb-10 text-blue font-extrabold">Weekly Attendance Report</h2>
+        {loading ? (
+          <p className="text-center text-gray-600">Loading...</p>
+        ) : error ? (
+          <p className="text-center text-red-600">{error}</p>
+        ) : (
+          <div className="tables-wrapper">
+            <AttendanceTable title="Supervisors" data={supervisors} isProfileOpen={isProfileOpen} />
+            <AttendanceTable title="Students" data={students} isProfileOpen={isProfileOpen} />
           </div>
-        </CSSTransition>
+        )}
       </main>
     </motion.div>
   );
