@@ -35,7 +35,7 @@ const Profile = () => {
 
   return (
     <div className="flex h-screen bg-gray-100">
-      {/* Sidebar Component */}
+     
       <Sidebar />  {/* Imported Sidebar */}
 
       <main className="flex-grow flex flex-col items-center justify-start p-8">

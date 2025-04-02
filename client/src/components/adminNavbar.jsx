@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
-const Sidebar = ({ setProfileModalState }) => { // Accepting a prop to control the state in parent component
+const Sidebar = ({ setProfileModalState }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -9,6 +9,7 @@ const Sidebar = ({ setProfileModalState }) => { // Accepting a prop to control t
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [username] = useState("Admin User");
   const [email, setEmail] = useState("admin2@tut.ac.za");
+  const [canEdit, setCanEdit] = useState(false); // State to control email editing
 
   const handleProfileChange = (e) => {
     const file = e.target.files[0];
@@ -22,25 +23,25 @@ const Sidebar = ({ setProfileModalState }) => { // Accepting a prop to control t
     }
   };
 
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-  };
-
-  const handleEditEmail = () => {
-    alert("Email updated successfully!");
-    setIsProfileOpen(false);
-  };
-
   const handleProfileModalToggle = () => {
-    setIsProfileOpen(!isProfileOpen);
-    setProfileModalState(!isProfileOpen); // Pass the state up to parent
+    const newState = !isProfileOpen;
+    setIsProfileOpen(newState);
+    if (setProfileModalState) setProfileModalState(newState);
   };
 
   const handleLogout = () => {
-    const isConfirmed = window.confirm("Are you sure you want to log out?");
-    if (isConfirmed) {
+    if (window.confirm("Are you sure you want to log out?")) {
       navigate("/adminlogin");
     }
+  };
+
+  const handleEditClick = () => {
+    setCanEdit(true); // Allow email field to be editable
+  };
+
+  const handleSaveClick = () => {
+    alert("Email updated successfully!");
+    setCanEdit(false); // Disable email editing after saving
   };
 
   return (
@@ -48,34 +49,21 @@ const Sidebar = ({ setProfileModalState }) => { // Accepting a prop to control t
       <h1 className="text-2xl font-bold text-center mb-6">ADMIN PANEL</h1>
 
       <nav className="flex-grow">
-        <div
-          className={`p-3 cursor-pointer hover:bg-blue-600 rounded transition ${
-            location.pathname === "/dashboard/admin" ? "bg-blue-700" : ""
-          }`}
-          onClick={() => navigate("/dashboard/admin")}
-        >
-          🏠 Dashboard
-        </div>
+        {[{ path: "/dashboard/admin", label: "🏠 Dashboard" },
+          { path: "/dashboard/admin/users", label: "👥 Users" },
+          { path: "/dashboard/admin/reports", label: "📊 Reports" }]
+          .map(({ path, label }) => (
+            <div
+              key={path}
+              className={`p-3 cursor-pointer rounded transition-colors duration-300 ${location.pathname === path ? "bg-blue-700" : "hover:bg-blue-600"}`}
+              onClick={() => navigate(path)}
+            >
+              {label}
+            </div>
+        ))}
         
-        <div
-          className={`p-3 cursor-pointer hover:bg-blue-600 rounded transition ${
-            location.pathname === "/dashboard/admin/users" ? "bg-blue-700" : ""
-          }`}
-          onClick={() => navigate("/dashboard/admin/users")}
-        >
-          👥 Users
-        </div>
-        <div
-          className={`p-3 cursor-pointer hover:bg-blue-600 rounded transition ${
-            location.pathname === "/dashboard/admin/reports" ? "bg-blue-700" : ""
-          }`}
-          onClick={() => navigate("/dashboard/admin/reports")}
-        >
-          📊 Reports
-        </div>
-
         <button
-          className="w-full p-3 bg-transparent hover:bg-blue-600 text-blue-600 hover:text-white rounded transition mt-4"
+          className="w-full cursor-pointer p-3 bg-transparent hover:bg-blue-600 text-blue-600 hover:text-white rounded transition-colors duration-300 mt-4"
           onClick={handleProfileModalToggle}
         >
           👤 Profile
@@ -83,20 +71,19 @@ const Sidebar = ({ setProfileModalState }) => { // Accepting a prop to control t
       </nav>
 
       <button
-        className="w-full p-3 bg-gray-400 text-black rounded hover:bg-gray-500 transition"
+        className="w-full p-3 bg-red-500 text-white rounded hover:bg-red-600 transition-colors duration-300"
         onClick={handleLogout}
       >
         🚪 Logout
       </button>
 
-      {/* Profile Modal */}
       {isProfileOpen && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50">
-          <div className="bg-white p-8 rounded-lg transparent w-96">
+          <div className="bg-white p-8 rounded-lg w-96 shadow-lg">
             <h2 className="text-3xl font-semibold text-gray-800 mb-4 text-center">Admin Profile</h2>
 
             <div className="flex justify-center mb-4">
-              <label className="relative w-32 h-32">
+              <label className="relative w-32 h-32 cursor-pointer">
                 <img
                   src={profilePic}
                   alt="Profile"
@@ -105,7 +92,7 @@ const Sidebar = ({ setProfileModalState }) => { // Accepting a prop to control t
                 <input
                   type="file"
                   accept="image/*"
-                  className="absolute inset-0 opacity-0 cursor-pointer"
+                  className="absolute inset-0 opacity-0"
                   onChange={handleProfileChange}
                 />
               </label>
@@ -117,21 +104,31 @@ const Sidebar = ({ setProfileModalState }) => { // Accepting a prop to control t
               <input
                 type="email"
                 value={email}
-                onChange={handleEmailChange}
+                onChange={(e) => setEmail(e.target.value)}
                 className="w-full p-2 mt-2 border border-gray-300 rounded-lg text-black"
                 placeholder="Edit Email"
+                disabled={!canEdit} // Disable input when not in edit mode
               />
             </div>
 
             <div className="flex justify-between mt-6">
+              {canEdit ? (
+                <button
+                  className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
+                  onClick={handleSaveClick}
+                >
+                  💾 Save
+                </button>
+              ) : (
+                <button
+                  className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
+                  onClick={handleEditClick}
+                >
+                  🖊 Edit Email
+                </button>
+              )}
               <button
-                className="bg-white text-black px-6 py-2 rounded-lg hover:bg-gray-800 transition"
-                onClick={handleEditEmail}
-              >
-                🖊 Edit Email
-              </button>
-              <button
-                className="bg-white text-black px-6 py-2 rounded-lg hover:bg-gray-800 transition"
+                className="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600 transition"
                 onClick={handleProfileModalToggle}
               >
                 ✖ Close
