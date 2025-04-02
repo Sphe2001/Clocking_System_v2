@@ -56,12 +56,30 @@ function AllUsers() {
   });
 
   return (
-    <motion.div className="flex min-h-screen bg-gray-50" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}>
+    <div className="flex min-h-screen bg-gray-50">
       <Sidebar />
-      <main className="flex-1 p-10 bg-white shadow-xl w-full flex flex-col items-center">
-        <h1 className="text-3xl mb-10 text-blue font-extrabold text-center">All System Users</h1>
+      <motion.main
+        className="flex-1 p-10 bg-white shadow-xl w-full flex flex-col items-center"
+        initial={{ opacity: 0, x: "100%" }}  // Starts from the right
+        animate={{ opacity: 1, x: 0 }}      // Moves to center
+        exit={{ opacity: 0, x: "-100%" }}   // Moves to the left when exiting
+        transition={{ duration: 0.8 }}      // Transition duration
+      >
+        <motion.h1
+          className="text-3xl mb-10 text-blue font-extrabold text-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.8 }}  // Content appears after main transition
+        >
+          All System Users
+        </motion.h1>
 
-        <div className="flex flex-col md:flex-row gap-4 items-center mb-6">
+        <motion.div
+          className="flex flex-col md:flex-row gap-4 items-center mb-6"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 1 }}  // Filter appears after title
+        >
           <div className="flex flex-col">
             <label className="font-semibold text-center mb-1">Filter by role:</label>
             <select value={filter} onChange={(e) => setFilter(e.target.value)} className="border p-2 rounded text-center">
@@ -73,18 +91,55 @@ function AllUsers() {
 
           <div className="flex flex-col">
             <label className="font-semibold text-center mb-1">Search:</label>
-            <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="border p-2 rounded text-center w-64" placeholder="Surname or Student/Staff Number" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="border p-2 rounded text-center w-64"
+              placeholder="Surname or Student/Staff Number"
+            />
           </div>
-        </div>
+        </motion.div>
 
         {loading ? (
-          <div className="text-center text-blue-500 font-semibold flex justify-center items-center h-32">Loading users...</div>
+          <motion.div
+            className="text-center text-blue-500 font-semibold flex justify-center items-center h-32"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.9 }}
+          >
+            Loading users...
+          </motion.div>
         ) : filteredUsers.length === 0 && filteredSupervisors.length === 0 ? (
-          <div className="text-center text-red-500 font-semibold flex justify-center items-center h-32">No records found.</div>
+          <motion.div
+            className="text-center text-red-500 font-semibold flex justify-center items-center h-32"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.9 }}
+          >
+            No records found.
+          </motion.div>
         ) : (
-          <div className="w-full flex flex-col items-center">
-            <h2 className="text-xl mb-4 text-center">Students</h2>
-            <div className="overflow-x-auto shadow-lg rounded-xl bg-white w-3/4">
+          <motion.div
+            className="w-full flex flex-col items-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.9 }}
+          >
+            <motion.h2
+              className="text-xl mb-4 text-center"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 1.2 }}  // Content fades in after filters
+            >
+              Students
+            </motion.h2>
+            <motion.div
+              className="overflow-x-auto shadow-lg rounded-xl bg-white w-3/4"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.9 }}
+            >
               <table className="w-full border-collapse border border-gray-300 text-center">
                 <thead className="bg-blue-100">
                   <tr className="text-sm text-gray-700">
@@ -99,7 +154,13 @@ function AllUsers() {
                 </thead>
                 <tbody>
                   {filteredUsers.map((user, index) => (
-                    <tr key={index} className="text-sm text-gray-700">
+                    <motion.tr
+                      key={index}
+                      className="text-sm text-gray-700"
+                      initial={{ y: 20, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      transition={{ duration: 0.9, delay: index * 0.1 }}
+                    >
                       <td className="p-4 border-b">{user.studentNo}</td>
                       <td className="p-4 border-b">{user.surname}</td>
                       <td className="p-4 border-b">{user.initials}</td>
@@ -107,15 +168,15 @@ function AllUsers() {
                       <td className="p-4 border-b">{user.email}</td>
                       <td className="p-4 border-b">{user.contactNo}</td>
                       <td className="p-4 border-b">{user.verified ? "True" : "False"}</td>
-                    </tr>
+                    </motion.tr>
                   ))}
                 </tbody>
               </table>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         )}
-      </main>
-    </motion.div>
+      </motion.main>
+    </div>
   );
 }
 

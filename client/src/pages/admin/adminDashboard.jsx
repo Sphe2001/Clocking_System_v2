@@ -52,18 +52,26 @@ function AdminDashboard() {
       <Sidebar />
       <motion.main 
         className="flex-1 p-10 bg-white shadow-xl ml-64 flex flex-col items-center justify-center"
-        initial={{ opacity: 0 }} 
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.8 }}
+        initial={{ opacity: 0, x: "100%" }}  // Starts from the right
+        animate={{ opacity: 1, x: 0 }}      // Moves to center
+        exit={{ opacity: 0, x: "-100%" }}   // Moves to the left when exiting
+        transition={{ duration: 0.8 }}      // Transition duration
       >
-        <h1 className="text-3xl mb-10 text-blue-800 font-extrabold text-center">Admin Panel</h1>
+        <motion.h1 
+          className="text-3xl mb-10 text-blue-800 font-extrabold text-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.8 }}  // Content appears after main transition
+        >
+          Admin Panel
+        </motion.h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           <motion.div 
             className="bg-yellow-100 p-4 rounded-lg shadow-md border border-gray-300"
             initial={{ scale: 0.8 }}
             animate={{ scale: 1 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.9 }}
           >
             <h3 className="text-lg font-semibold text-center mb-2">Total Students vs Supervisors</h3>
             <div className="flex justify-between text-lg font-semibold text-gray-800">
@@ -76,7 +84,7 @@ function AdminDashboard() {
             className="bg-blue-100 p-4 rounded-lg shadow-md border border-gray-300"
             initial={{ scale: 0.8 }}
             animate={{ scale: 1 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.9, delay: 0.8 }}
           >
             <h3 className="text-lg font-semibold text-center mb-2">Total Attendance - Today</h3>
             <div className="flex justify-between text-lg font-semibold text-gray-800">
@@ -100,7 +108,7 @@ function AdminDashboard() {
             className="text-center text-lg font-semibold"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.9, delay: 0.8 }}
           >
             Loading...
           </motion.p>
@@ -109,7 +117,7 @@ function AdminDashboard() {
             className="overflow-x-auto max-h-96 shadow-lg rounded-xl bg-white w-full"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.9 }}
           >
             <table className="w-full table-auto border-collapse border border-gray-300">
               <thead className="bg-blue-100 top-0">
@@ -128,7 +136,7 @@ function AdminDashboard() {
                     className="text-sm text-gray-700"
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    transition={{ duration: 0.9, delay: index * 0.1 }}
                   >
                     <td className="p-6 border-b text-center">{user.username}</td>
                     <td className="p-6 border-b text-center">{user.surname}</td>
