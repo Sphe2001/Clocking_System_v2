@@ -12,6 +12,9 @@ import StudentDashboard from './pages/student/studentDashboard.jsx'
 import ViewProfile from './pages/student/viewProfile/viewProfile.jsx';
 import LoginPage from './pages/auth/login.jsx';
 import SignUpPage from './pages/auth/signUp.jsx';
+import SupervisorDashboard from './pages/supervisor/supervisorDashboard.jsx';
+import ViewSupervisorProfile from './pages/supervisor/viewProfile/viewSupervisorProfile.jsx'
+import ViewAttendance from './pages/supervisor/viewAttendance/viewAttendance.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -27,6 +30,10 @@ createRoot(document.getElementById('root')).render(
           <Route path="/dashboard/admin/users" element={<AdminUsers />} />
           <Route path="/pages/student" element={<StudentDashboard />} />
           <Route path="/pages/student/viewProfile" element={<ViewProfile />} />
+          <Route path="/pages/supervisor" element={<SupervisorDashboard />} />
+          <Route path="/pages/supervisor/viewProfile" element={<ViewSupervisorProfile />}/>
+          <Route path="/pages/supervisor/viewAttendance" element={<ViewAttendance />} />
+       
         </Routes>
       </AnimatePresence>
     </BrowserRouter>
