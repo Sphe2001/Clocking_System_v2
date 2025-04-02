@@ -10,7 +10,7 @@ const StudentNavbar = () => {
     <nav className="bg-gradient-to-b from-blue-100 to-blue-500 text-white p-5 mr-5 shadow-md w-full backdrop-blur-md rounded-lg shadow-lg">
       <div className="container mx-auto flex p-3 justify-between items-center">
         {/* Dashboard Title */}
-        <h1 className="text-xl font-bold cursor-pointer" onClick={() => navigate('/pages/student')}>
+        <h1 className="text-4xl font-bold cursor-pointer font-serif hover:text-blue-500" onClick={() => navigate('/pages/student')}>
           Student Dashboard
         </h1>
 

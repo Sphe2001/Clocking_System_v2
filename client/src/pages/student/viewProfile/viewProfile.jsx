@@ -10,13 +10,13 @@ const ViewProfile = () => {
       {/* profile */}
       <div className="flex flex-col items-center flex-grow pt-5  text-white  ">
 
-      <h1 className="text-5xl  font-extrabold font-serif text-black pb-3 border-b-5 border-dotted border-green-500 my-4 w-full">Your Profile</h1>
+      <h1 className="text-5xl  font-extrabold font-serif text-black pb-3 border-b-5 border-dotted border-blue-500 my-4 w-full">Your Profile</h1>
 
       </div>
 
       {/* Profile Content */}
-      <div className="flex flex-col items-center  flex-grow pb-30 text-white px-6 sm:px-8 md:px-12 ">
-        <div className="relative z-10 max-w-lg w-full text-center space-y-6 p-8 bg-gradient-to-b from-white to-blue-400 bg-opacity-10 backdrop-blur-md rounded-lg shadow-lg">
+      <div className="flex flex-col items-center w-full h-full p-10 flex-grow pb-10 text-white px-6 sm:px-8 md:px-12 ">
+        <div className="relative z-10 max-w-lg w-full text-center space-y-6 p-20 bg-gradient-to-b from-white to-blue-400 bg-opacity-10 backdrop-blur-md rounded-lg shadow-lg">
          
           {/* Profile Picture */}
           <img 
