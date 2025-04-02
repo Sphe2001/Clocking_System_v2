@@ -9,6 +9,7 @@ const Sidebar = ({ setProfileModalState }) => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [username] = useState("Admin User");
   const [email, setEmail] = useState("admin2@tut.ac.za");
+  const [canEdit, setCanEdit] = useState(false); // State to control email editing
 
   const handleProfileChange = (e) => {
     const file = e.target.files[0];
@@ -25,7 +26,7 @@ const Sidebar = ({ setProfileModalState }) => {
   const handleProfileModalToggle = () => {
     const newState = !isProfileOpen;
     setIsProfileOpen(newState);
-    if (setProfileModalState) setProfileModalState(newState); 
+    if (setProfileModalState) setProfileModalState(newState);
   };
 
   const handleLogout = () => {
@@ -34,29 +35,35 @@ const Sidebar = ({ setProfileModalState }) => {
     }
   };
 
+  const handleEditClick = () => {
+    setCanEdit(true); // Allow email field to be editable
+  };
+
+  const handleSaveClick = () => {
+    alert("Email updated successfully!");
+    setCanEdit(false); // Disable email editing after saving
+  };
+
   return (
     <aside className="w-64 bg-blue-800 text-white h-screen p-6 fixed left-0 top-0 flex flex-col">
       <h1 className="text-2xl font-bold text-center mb-6">ADMIN PANEL</h1>
 
       <nav className="flex-grow">
-        {[
-          { path: "/dashboard/admin", label: "🏠 Dashboard" },
+        {[{ path: "/dashboard/admin", label: "🏠 Dashboard" },
           { path: "/dashboard/admin/users", label: "👥 Users" },
-          { path: "/dashboard/admin/reports", label: "📊 Reports" },
-        ].map(({ path, label }) => (
-          <div
-            key={path}
-            className={`p-3 cursor-pointer rounded transition-colors duration-300 ${
-              location.pathname === path ? "bg-blue-700" : "hover:bg-blue-600"
-            }`}
-            onClick={() => navigate(path)}
-          >
-            {label}
-          </div>
+          { path: "/dashboard/admin/reports", label: "📊 Reports" }]
+          .map(({ path, label }) => (
+            <div
+              key={path}
+              className={`p-3 cursor-pointer rounded transition-colors duration-300 ${location.pathname === path ? "bg-blue-700" : "hover:bg-blue-600"}`}
+              onClick={() => navigate(path)}
+            >
+              {label}
+            </div>
         ))}
-
+        
         <button
-          className="w-full p-3 bg-transparent hover:bg-blue-600 text-blue-600 hover:text-white rounded transition-colors duration-300 mt-4"
+          className="w-full cursor-pointer p-3 bg-transparent hover:bg-blue-600 text-blue-600 hover:text-white rounded transition-colors duration-300 mt-4"
           onClick={handleProfileModalToggle}
         >
           👤 Profile
@@ -100,19 +107,26 @@ const Sidebar = ({ setProfileModalState }) => {
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full p-2 mt-2 border border-gray-300 rounded-lg text-black"
                 placeholder="Edit Email"
+                disabled={!canEdit} // Disable input when not in edit mode
               />
             </div>
 
             <div className="flex justify-between mt-6">
-              <button
-                className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
-                onClick={() => {
-                  alert("Email updated successfully!");
-                  setIsProfileOpen(false);
-                }}
-              >
-                🖊 Edit Email
-              </button>
+              {canEdit ? (
+                <button
+                  className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
+                  onClick={handleSaveClick}
+                >
+                  💾 Save
+                </button>
+              ) : (
+                <button
+                  className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
+                  onClick={handleEditClick}
+                >
+                  🖊 Edit Email
+                </button>
+              )}
               <button
                 className="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600 transition"
                 onClick={handleProfileModalToggle}
