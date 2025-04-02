@@ -6,6 +6,7 @@ const UserOTPVerification = require("../../models/userOTPVerification");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 const getUserId = require("../../helpers/getUserIdSignup");
+const getTokenData = require("../../helpers/getTokenData");
 const dotenv = require("dotenv")
 
 const router = express.Router();
@@ -117,10 +118,11 @@ router.post("/register/supervisor", async (req, res) => {
               sameSite: "Strict",
               maxAge: 24 * 60 * 60 * 1000 * 7,
             });
-
+    const redirectUrl = "/verifyemail/supervisor"
     res.status(201).json({
       message: "Supervisor registered successfully. Verification OTP sent.",
       supervisor,
+      redirectUrl,
     });
   } catch (error) {
     console.error("Error registering supervisor:", error);
@@ -200,12 +202,52 @@ router.post("/verifyotp/supervisor", async (req, res) => {
       expires: new Date(0)
     });
 
+    const redirectUrl = "/login"
+
     res.status(200).json({
       status: "VERIFIED",
       message: "Supervisor email verified!",
+      redirectUrl,
     });
   } catch (error) {
     console.error("Error verifying OTP:", error);
+    res.status(500).json({
+      status: "FAILED",
+      message: "Internal server error",
+    });
+  }
+});
+
+//resend otp
+router.post("/resendotp/supervisor", async (req, res) => {
+  try {
+    const { id, email } = getTokenData(req); 
+  
+    const userId = id;
+
+    if (!id || !email) {
+      return res.status(400).json({
+        status: "FAILED",
+        message: "Missing token information",
+      });
+    }
+
+    const userOTPRecord = await UserOTPVerification.findOne({ where: { userId } });
+
+    if (userOTPRecord) {
+      await UserOTPVerification.destroy({ where: { userId} });
+    }
+
+    await sendOTPVerificationEmail(userId, email);
+  
+
+    res.status(201).json({
+      message: "Verification OTP sent to email.",
+      status: "SUCCESS",
+    });
+
+  } catch (error) {
+    console.error("Error sending OTP:", error);
     res.status(500).json({
       status: "FAILED",
       message: "Internal server error",
