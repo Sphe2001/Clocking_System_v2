@@ -1,35 +1,47 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
-function App() {
-  const [count, setCount] = useState(0);
+export default function WelcomePage() {
+  const navigate = useNavigate();
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1 className="text-red-500">Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-br from-blue-500 to-indigo-600 text-white text-center px-6">
+      {/* Animated Heading */}
+      <motion.h1
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1 }}
+        className="text-4xl md:text-6xl font-bold mb-4"
+      >
+        Welcome to Clock It!
+      </motion.h1>
+
+      {/* Subtitle */}
+      <motion.p
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5, duration: 1 }}
+        className="text-lg md:text-xl max-w-xl"
+      >
+        Discover new opportunities and stay connected. Let's get started!
+      </motion.p>
+
+      {/* Animated Get Started Button */}
+      <motion.button
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+        animate={{ y: [0, -5, 0] }}
+        transition={{
+          repeat: Infinity,
+          repeatType: "loop",
+          duration: 1.5,
+        }}
+        onClick={() => navigate("/login")}
+        className="mt-10 bg-white text-indigo-600 px-6 py-3 rounded-full text-lg font-semibold shadow-lg hover:bg-gray-200 transition"
+      >
+        Get Started
+      </motion.button>
+    </div>
   );
 }
-
-export default App;
