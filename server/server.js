@@ -4,14 +4,13 @@ const sequelize = require("./src/helpers/dbConfig");
 const authRoutes = require("./src/routes/auth/authRoutes");
 const clockin = require("./src/routes/student/clock_in");
 const earlyLeave = require("./src/routes/student/studentRequest/earlyLeave")
-<<<<<<< HEAD
 const clockout = require("./src/routes/student/clock_out")
 const getHoursWorked =  require("./src/routes/student/getHourWorked")
-=======
 const usersRoutes = require("./src/routes/admin/fetchAllStudentUsers/users");
 const supervisorUsersRoutes = require("./src/routes/admin/fetchAllSupervisorUsers/supervisorUsers");
 const cors = require("cors");
->>>>>>> 70e6dd4a64b14ff986afa25a4dcafb1a4776ff05
+const cookieParser = require("cookie-parser");
+
 
 const app = express();
 
@@ -19,7 +18,12 @@ dotenv.config();
 
 // Middleware
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true,
+}));
+
+app.use(cookieParser());
 
 // Routes
 app.use("/api/auth", authRoutes);
