@@ -1,4 +1,6 @@
 export default function LoginPage() {
+
+  const domain = import.meta.env.VITE_REACT_APP_DOMAIN;
     return (
       <div className=" w-96 flex items-center justify-center">
         <div className="w-full max-w-md p-8 bg-white shadow-lg rounded-lg sm:max-w-lg md:max-w-xl">

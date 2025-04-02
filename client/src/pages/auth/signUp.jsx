@@ -1,64 +1,76 @@
-export default function SignUpPage() {
-    return (
-      <div className=" w-96 flex items-center justify-center">
-        <div className="w-full max-w-md p-8 bg-white shadow-lg rounded-lg sm:max-w-lg md:max-w-xl">
-          <div className="flex flex-col items-center">
-            <img
-              alt="TUT Logo"
-              src="https://www.accord.org.za/wp-content/uploads/2016/09/TUT-Logo1.jpg"
-              className="h-24 w-24 mb-4"
-            />
-            <h2 className="text-center text-2xl font-bold tracking-tight text-gray-900">
-              Sign Up
-            </h2>
-          </div>
-  
-          <form action="#" method="POST" className="mt-6 space-y-6">
-            
+import { useState } from "react";
+import axios from "axios";
 
-            <div className="flex flex-col">
-              <label htmlFor="email" className="text-sm font-medium text-gray-900 text-left">
-                Email address
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                required
-                autoComplete="email"
-                className="mt-2 block w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring focus:ring-indigo-300"
-              />
-            </div>
-  
-            <div className="flex flex-col">
-              <label htmlFor="password" className="text-sm font-medium text-gray-900 text-left">
-                Password
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                required
-                autoComplete="current-password"
-                className="mt-2 block w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring focus:ring-indigo-300"
-              />
-            </div>
-  
-            <button
-              type="submit"
-              className="w-full flex justify-center rounded-md bg-indigo-600 px-4 py-2 text-white font-semibold shadow-md hover:bg-indigo-500 transition duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-            >
-              Sign up
-            </button>
-          </form>
-  
-          <p className="mt-6 text-center text-sm text-gray-500">
-            Already have an account?{' '}
-            <a href="/login" className="font-semibold text-indigo-600 hover:text-indigo-500 transition duration-300">
-              Sign-in here
-            </a>
-          </p>
+export default function SignUpPage() {
+  const [role, setRole] = useState("student");
+  const [formData, setFormData] = useState({
+    studentNo: "",
+    staffNo: "",
+    email: "",
+    surname: "",
+    initials: "",
+    contactNo: "",
+    password: "",
+    specialization: "",
+  });
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const endpoint = role === "student" ? "/api/register/student" : "/api/register/supervisor";
+      const payload = role === "student" 
+        ? { ...formData, staffNo: undefined }
+        : { ...formData, studentNo: undefined };
+      
+      await axios.post(endpoint, payload);
+      alert("Registration successful! Check your email for verification.");
+    } catch (error) {
+      alert(error.response?.data?.message || "Registration failed.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className={`min-h-screen flex items-center justify-center ${role === "student" ? "bg-blue-500" : "bg-red-500"}`}>
+      <div className="bg-white p-8 rounded-lg shadow-lg w-96">
+        <div className="flex justify-center mb-4">
+          <label className="mr-4">
+            <input type="radio" name="role" value="student" checked={role === "student"} onChange={() => setRole("student")} />
+            Student
+          </label>
+          <label>
+            <input type="radio" name="role" value="supervisor" checked={role === "supervisor"} onChange={() => setRole("supervisor")} />
+            Supervisor
+          </label>
         </div>
+        
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {role === "student" && (
+            <input type="text" name="studentNo" placeholder="Student No" value={formData.studentNo} onChange={handleChange} className="w-full p-2 border rounded" required />
+          )}
+          {role === "supervisor" && (
+            <input type="text" name="staffNo" placeholder="Staff No" value={formData.staffNo} onChange={handleChange} className="w-full p-2 border rounded" required />
+          )}
+          <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} className="w-full p-2 border rounded" required />
+          <input type="text" name="surname" placeholder="Surname" value={formData.surname} onChange={handleChange} className="w-full p-2 border rounded" required />
+          <input type="text" name="initials" placeholder="Initials" value={formData.initials} onChange={handleChange} className="w-full p-2 border rounded" required />
+          <input type="text" name="contactNo" placeholder="Contact No" value={formData.contactNo} onChange={handleChange} className="w-full p-2 border rounded" required />
+          <input type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} className="w-full p-2 border rounded" required />
+          <input type="text" name="specialization" placeholder="Specialization" value={formData.specialization} onChange={handleChange} className="w-full p-2 border rounded" required />
+          
+          <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded flex justify-center items-center">
+            {loading ? <span className="loader"></span> : "Sign Up"}
+          </button>
+        </form>
       </div>
-    );
-  }
+    </div>
+  );
+}
