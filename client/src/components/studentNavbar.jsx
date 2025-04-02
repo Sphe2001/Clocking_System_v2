@@ -18,11 +18,11 @@ const StudentNavbar = () => {
         <div className="flex space-x-8">
           <div className="flex items-center cursor-pointer" onClick={() => navigate('/pages/student/viewProfile')}>
             <UserIcon className="mx-1 h-6 w-6 stroke-green-400" />
-            <span className={location.pathname === '/dashboard/student/viewProfile' ? 'text-red-300' : ''}>View Profile</span>
+            <span className={location.pathname === '/pages/student/viewProfile' ? 'text-red-300' : ''}>View Profile</span>
           </div>
-          <div className="flex items-center cursor-pointer" onClick={() => navigate('/dashboard/student/viewAttendanceHistory')}>
+          <div className="flex items-center cursor-pointer" onClick={() => navigate('/pages/student/viewAttendanceHistory')}>
             <DeviceTabletIcon className="mx-1 h-6 w-6 stroke-green-400" />
-            <span className={location.pathname === '/dashboard/student/viewAttendanceHistory' ? 'text-gray-300' : ''}>View Attendance History</span>
+            <span className={location.pathname === '/pages/student/viewAttendanceHistory' ? 'text-gray-300' : ''}>View Attendance History</span>
           </div>
         </div>
       </div>
