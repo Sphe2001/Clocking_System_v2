@@ -15,7 +15,9 @@ const StudentDashboard = () => {
 
           {/* Sign Attendance Button */}
           <input type="button" className="w-full max-w-xs p-4 bg-blue-600 text-white text-lg font-semibold rounded-lg hover:bg-blue-700 transition-all shadow-md" value="Sign Attendance" />
-
+          {/* End Session Button */}
+          <input type="button" className="w-full max-w-xs p-4 bg-blue-600 text-white text-lg font-semibold rounded-lg hover:bg-blue-700 transition-all shadow-md" value="End Session" />
+          
           <div className="mt-4 text-black">
             <p className="text-lg">You signed in at: 8:00 </p>
             <p className="text-lg">You signed out at: 16:00</p>
