@@ -43,7 +43,7 @@ export default function VerifyResetPasswordOTPPage() {
   const handleResendOTP = async () => {
     try {
         const response = await axios.post(
-          `${domain}/api/auth/resendotp/student`,
+          `${domain}/api/auth/resend/password/resetotp`,
           { otp },
           { withCredentials: true }
         );
