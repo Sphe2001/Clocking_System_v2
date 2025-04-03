@@ -4,7 +4,9 @@ const { Admin, Student, Supervisor } = require("../../models");
 const sendResetPasswordOTP = require("../../helpers/sendPasswordResetOTP");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
-const dotenv = require("dotenv")
+const dotenv = require("dotenv");
+const getUserEmail = require("../../helpers/getUserEmailPassReset");
+const PasswordResetOTP = require("../../models/passwordResetOTP")
 
 const router = express.Router();
 router.use(cookieParser());
@@ -48,13 +50,50 @@ router.post("/request/passwordreset", async (req, res) => {
               sameSite: "Strict",
               maxAge:  60 * 60 * 1000 ,
             });
-
+    const redirectUrl = "/verify/resetpasswordotp"
     res.status(200).json({
       status: "SUCCESS",
       message: "OTP sent to your email",
+      redirectUrl,
     });
   } catch (error) {
     console.error("Error verifying OTP:", error);
+    res.status(500).json({
+      status: "FAILED",
+      message: "Internal server error",
+    });
+  }
+});
+
+//resend otp
+router.post("/resend/password/resetotp", async (req, res) => {
+  try {
+    const  email  = getUserEmail(req);
+    console.log(email)
+
+    if (!email) {
+      return res.status(400).json({
+        status: "FAILED",
+        message: "Missing token information",
+      });
+    }
+
+    const userOTPRecord = await PasswordResetOTP.findOne({ where: { email } });
+
+    if (userOTPRecord) {
+      await PasswordResetOTP.destroy({ where: { email} });
+    }
+
+    await sendResetPasswordOTP(email);
+  
+
+    res.status(201).json({
+      message: "Verification OTP sent to email.",
+      status: "SUCCESS",
+    });
+
+  } catch (error) {
+    console.error("Error sending OTP:", error);
     res.status(500).json({
       status: "FAILED",
       message: "Internal server error",

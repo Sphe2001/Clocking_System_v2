@@ -73,9 +73,12 @@ router.post("/passwordreset", async (req, res) => {
       expires: new Date(0)
     });
 
+    const redirectUrl = "/login"
+
     res.status(200).json({
       status: "SUCCESS",
       message: "Password has been reset successfully!",
+      redirectUrl,
     });
   } catch (error) {
     console.error("Error resetting password:", error);
