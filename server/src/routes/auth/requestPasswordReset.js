@@ -48,10 +48,11 @@ router.post("/request/passwordreset", async (req, res) => {
               sameSite: "Strict",
               maxAge:  60 * 60 * 1000 ,
             });
-
+    const redirectUrl = "/verify/resetpasswordotp"
     res.status(200).json({
       status: "SUCCESS",
       message: "OTP sent to your email",
+      redirectUrl,
     });
   } catch (error) {
     console.error("Error verifying OTP:", error);

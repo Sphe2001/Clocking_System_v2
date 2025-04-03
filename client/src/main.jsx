@@ -17,6 +17,9 @@ import VerifySupervisorEmail from './pages/auth/verifySupervisorEmail.jsx';
 import SupervisorDashboard from './pages/supervisor/supervisorDashboard.jsx';
 import ViewSupervisorProfile from './pages/supervisor/viewProfile/viewSupervisorProfile.jsx'
 import ViewAttendance from './pages/supervisor/viewAttendance/viewAttendance.jsx';
+import ForgotPasswordPage from './pages/auth/forgotpassword.jsx';
+import VerifyResetPasswordOTPPage from './pages/auth/verifyResetPasswordOTP.jsx';
+import ResetPasswordPage from './pages/auth/ResetPassword.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -28,15 +31,18 @@ createRoot(document.getElementById('root')).render(
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/verifyemail/student" element={<VerifyStudentEmail/>} />
           <Route path="/verifyemail/supervisor" element={<VerifySupervisorEmail/>} />
+          <Route path="/forgotpassword" element={<ForgotPasswordPage/>} />
+          <Route path="/verify/resetpasswordotp" element={<VerifyResetPasswordOTPPage/>} />
+          <Route path="/resetpassword" element={<ResetPasswordPage/>} />
           <Route path="/dashboard/admin/profile" element={<AdminProfile />} />
           <Route path="/dashboard/admin/reports" element={<AdminReports />} />
           <Route path="/dashboard/admin" element={<AdminDashboard />} />
           <Route path="/dashboard/admin/users" element={<AdminUsers />} />
-          <Route path="/pages/student" element={<StudentDashboard />} />
-          <Route path="/pages/student/viewProfile" element={<ViewProfile />} />
-          <Route path="/pages/supervisor" element={<SupervisorDashboard />} />
-          <Route path="/pages/supervisor/viewProfile" element={<ViewSupervisorProfile />}/>
-          <Route path="/pages/supervisor/viewAttendance" element={<ViewAttendance />} />
+          <Route path="/dashboard/student" element={<StudentDashboard />} />
+          <Route path="/dashboard/student/viewProfile" element={<ViewProfile />} />
+          <Route path="/dashboard/supervisor" element={<SupervisorDashboard />} />
+          <Route path="/dashboard/supervisor/viewProfile" element={<ViewSupervisorProfile />}/>
+          <Route path="/dashboard/supervisor/viewAttendance" element={<ViewAttendance />} />
        
         </Routes>
       </AnimatePresence>
