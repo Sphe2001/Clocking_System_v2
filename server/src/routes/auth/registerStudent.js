@@ -93,8 +93,8 @@ router.post("/register/student", async (req, res) => {
       contactNo,
       specialization,
       password: hashedPassword,
-      isVerified: true,
-      isPasswordResetVerified: true,
+      isVerified: false,
+      isPasswordResetVerified: false,
     });
 
     const userId = studentNo;
