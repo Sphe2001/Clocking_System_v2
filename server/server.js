@@ -10,7 +10,8 @@ const usersRoutes = require("./src/routes/admin/fetchAllStudentUsers/users");
 const supervisorUsersRoutes = require("./src/routes/admin/fetchAllSupervisorUsers/supervisorUsers");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-
+const supervisorClockInRoute = require("./src/routes/supervisor/clock_in");
+const supervisorClockOutRoute = require("./src/routes/supervisor/clock_out");
 
 const app = express();
 
@@ -33,7 +34,8 @@ app.use("/api", getHoursWorked)
 app.use("/api", earlyLeave);
 app.use("/api/admin/fetchAllStudentUsers", usersRoutes);
 app.use("/api/admin/fetchAllSupervisorUsers", supervisorUsersRoutes);
-
+app.use("/api", supervisorClockInRoute);
+app.use("/api", supervisorClockOutRoute);
 
 
 
