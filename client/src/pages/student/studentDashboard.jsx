@@ -3,11 +3,20 @@ import StudentNavbar from '../../components/studentNavbar';
 
 const StudentDashboard = () => {
   return (
-    <div className="min-h-screen flex flex-col  bg-gradient-to-b from-blue-200 to-blue-400 backdrop-blur-md rounded-lg shadow-lg">
+
+    
+    <div className="min-h-screen flex flex-col  bg-gradient-to-b from-blue-200 to-blue-400 backdrop-blur-md  shadow-lg">
+      
       
       {/* Main Content Section (includes Navbar) */}
-      <div className="flex flex-col items-center justify-center flex-grow text-white px-6 sm:px-8 md:px-12">
-        <div className="w-300  bg-blue-800 text-center rounded-lg shadow-lg p-10 space-y-8">
+      <div className="flex flex-col items-center justify-center  flex-grow text-white px-6 sm:px-8 md:px-12">
+       
+       {/*LOGO */}
+      <div className="flex flex-col  pr-160 text-9xl text-blue-500  font-extrabold  ">
+      <h1 classsName="text-blue-500  ">CLOCK IT</h1>
+      </div>
+      
+       <div className="w-300  bg-blue-800 text-center rounded-lg shadow-lg p-10 space-y-8">
           
           {/* Navbar */}
           <StudentNavbar />
