@@ -59,7 +59,7 @@ function AllUsers() {
     <div className="flex min-h-screen bg-gray-50">
       <Sidebar />
       <motion.main
-        className="flex-1 p-10 bg-white shadow-xl w-full flex flex-col items-center"
+        className="flex-1 p-10 bg-white shadow-xl w-full flex flex-col items-center  ml-64 flex flex-col items-center justify-center"
         initial={{ opacity: 0, x: "100%" }}  // Starts from the right
         animate={{ opacity: 1, x: 0 }}      // Moves to center
         exit={{ opacity: 0, x: "-100%" }}   // Moves to the left when exiting

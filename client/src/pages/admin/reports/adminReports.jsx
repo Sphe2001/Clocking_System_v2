@@ -116,7 +116,7 @@ const Reports = ({ isProfileOpen }) => {
     <div className="flex min-h-screen bg-gray-50">
       <Sidebar setProfileModalState={() => {}} />
       <motion.main
-        className="reports-main flex-1 p-10 bg-white shadow-xl mx-auto w-3/4 text-center"
+        className="reports-main flex-1 p-10 bg-white shadow-xl mx-auto w-3/4 text-center  ml-64 flex flex-col items-center justify-center"
         initial={{ opacity: 0, x: "100%" }}
         animate={{ opacity: 1, x: 0 }}
         exit={{ opacity: 0, x: "-100%" }}
