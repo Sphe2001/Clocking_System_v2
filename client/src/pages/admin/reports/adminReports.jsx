@@ -12,7 +12,8 @@ const AttendanceTable = ({ title, data, isProfileOpen }) => (
       <table className="w-full table-auto border-collapse border border-gray-300">
         <thead className={`bg-blue-600 text-white top-0 ${isProfileOpen ? "hidden" : ""}`}>
           <tr className="text-sm text-gray-100">
-            <th className="p-4 border-b text-left">Name</th>
+            <th className="p-4 border-b text-left">Surname</th>
+            <th className="p-4 border-b text-left">Staff/Student Number</th>
             <th className="p-4 border-b text-center">Monday</th>
             <th className="p-4 border-b text-center">Tuesday</th>
             <th className="p-4 border-b text-center">Wednesday</th>
@@ -21,21 +22,28 @@ const AttendanceTable = ({ title, data, isProfileOpen }) => (
           </tr>
         </thead>
         <tbody>
-          {data.map((person, index) => (
-            <tr key={index} className="text-sm text-gray-700">
-              <td className="p-4 border-b">{person.name}</td>
-              <td className="p-4 border-b text-center">{person.monday || "-"}</td>
-              <td className="p-4 border-b text-center">{person.tuesday || "-"}</td>
-              <td className="p-4 border-b text-center">{person.wednesday || "-"}</td>
-              <td className="p-4 border-b text-center">{person.thursday || "-"}</td>
-              <td className="p-4 border-b text-center">{person.friday || "-"}</td>
-            </tr>
-          ))}
+          {data.map((person, index) => {
+            // Ensure both staff_number and student_number are displayed dynamically
+            const id = person.staff_number || person.student_number || "-";
+            const surname = person.surname || person.name || "-"; // Assuming surname or name exists
+            return (
+              <tr key={index} className="text-sm text-gray-700">
+                <td className="p-4 border-b">{surname}</td>
+                <td className="p-4 border-b">{id}</td>
+                <td className="p-4 border-b text-center">{person.monday ? "Present" : "Absent"}</td>
+                <td className="p-4 border-b text-center">{person.tuesday ? "Present" : "Absent"}</td>
+                <td className="p-4 border-b text-center">{person.wednesday ? "Present" : "Absent"}</td>
+                <td className="p-4 border-b text-center">{person.thursday ? "Present" : "Absent"}</td>
+                <td className="p-4 border-b text-center">{person.friday ? "Present" : "Absent"}</td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>
   </div>
 );
+
 
 // Main Reports Component
 const Reports = ({ isProfileOpen }) => {
@@ -49,8 +57,8 @@ const Reports = ({ isProfileOpen }) => {
     const fetchData = async () => {
       try {
         const [supervisorRes, studentRes] = await Promise.all([
-          fetch("http://localhost:3001/api/admin/fetchAllSupervisorUsers"),
-          fetch("http://localhost:3001/api/admin/fetchAllStudentUsers"),
+          fetch("http://localhost:3001/api/admin/fetchAllSupervisorUsers/supervisorUsers"),
+          fetch("http://localhost:3001/api/admin/fetchAllStudentUsers/users"),
         ]);
 
         if (!supervisorRes.ok || !studentRes.ok) {
@@ -99,7 +107,12 @@ const Reports = ({ isProfileOpen }) => {
             }),
             ...data.map((person) =>
               new Paragraph(
-                `${person.name} - Mon: ${person.monday || "-"}, Tue: ${person.tuesday || "-"}, Wed: ${person.wednesday || "-"}, Thu: ${person.thursday || "-"}, Fri: ${person.friday || "-"}`
+                `${person.surname || person.name || "-"} (${person.student_number || person.staff_number || "-"}) - ` +
+                `Mon: ${person.monday ? "Present" : "Absent"}, ` +
+                `Tue: ${person.tuesday ? "Present" : "Absent"}, ` +
+                `Wed: ${person.wednesday ? "Present" : "Absent"}, ` +
+                `Thu: ${person.thursday ? "Present" : "Absent"}, ` +
+                `Fri: ${person.friday ? "Present" : "Absent"}`
               )
             ),
           ],
@@ -116,7 +129,7 @@ const Reports = ({ isProfileOpen }) => {
     <div className="flex min-h-screen bg-gray-50">
       <Sidebar setProfileModalState={() => {}} />
       <motion.main
-        className="reports-main flex-1 p-10 bg-white shadow-xl mx-auto w-3/4 text-center  ml-64 flex flex-col items-center justify-center"
+        className="reports-main flex-1 p-10 bg-white shadow-xl mx-auto w-3/4 text-center ml-64 flex flex-col items-center justify-center"
         initial={{ opacity: 0, x: "100%" }}
         animate={{ opacity: 1, x: 0 }}
         exit={{ opacity: 0, x: "-100%" }}
@@ -155,8 +168,14 @@ const Reports = ({ isProfileOpen }) => {
           <p className="text-center text-red-600">{error}</p>
         ) : (
           <div className="tables-wrapper">
-            <AttendanceTable title="Supervisors" data={supervisors} isProfileOpen={isProfileOpen} />
-            <AttendanceTable title="Students" data={students} isProfileOpen={isProfileOpen} />
+            {exportType === "all" && (
+              <>
+                <AttendanceTable title="Supervisors" data={supervisors} isProfileOpen={isProfileOpen} />
+                <AttendanceTable title="Students" data={students} isProfileOpen={isProfileOpen} />
+              </>
+            )}
+            {exportType === "students" && <AttendanceTable title="Students" data={students} isProfileOpen={isProfileOpen} />}
+            {exportType === "supervisors" && <AttendanceTable title="Supervisors" data={supervisors} isProfileOpen={isProfileOpen} />}
           </div>
         )}
       </motion.main>
