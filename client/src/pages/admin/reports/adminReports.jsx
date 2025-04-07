@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion"; // Import motion for transitions
+import { motion } from "framer-motion";
 import Sidebar from "../../../components/adminNavbar";
+import { Document, Packer, Paragraph, TextRun } from "docx";
+import { saveAs } from "file-saver";
 
 // Reusable Attendance Table Component
 const AttendanceTable = ({ title, data, isProfileOpen }) => (
@@ -41,6 +43,7 @@ const Reports = ({ isProfileOpen }) => {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [exportType, setExportType] = useState("all");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -69,24 +72,83 @@ const Reports = ({ isProfileOpen }) => {
     fetchData();
   }, []);
 
+  const handleExport = () => {
+    let title = "Attendance Report";
+    let data = [];
+
+    if (exportType === "supervisors") {
+      title = "Supervisors Attendance Report";
+      data = supervisors;
+    } else if (exportType === "students") {
+      title = "Students Attendance Report";
+      data = students;
+    } else {
+      title = "All Attendance Report";
+      data = [...supervisors, ...students];
+    }
+
+    const doc = new Document({
+      sections: [
+        {
+          children: [
+            new Paragraph({
+              children: [
+                new TextRun({ text: title, bold: true, size: 32 }),
+                new TextRun("\n\n"),
+              ],
+            }),
+            ...data.map((person) =>
+              new Paragraph(
+                `${person.name} - Mon: ${person.monday || "-"}, Tue: ${person.tuesday || "-"}, Wed: ${person.wednesday || "-"}, Thu: ${person.thursday || "-"}, Fri: ${person.friday || "-"}`
+              )
+            ),
+          ],
+        },
+      ],
+    });
+
+    Packer.toBlob(doc).then((blob) => {
+      saveAs(blob, `${title.replace(/\s+/g, "_")}.docx`);
+    });
+  };
+
   return (
     <div className="flex min-h-screen bg-gray-50">
       <Sidebar setProfileModalState={() => {}} />
       <motion.main
         className="reports-main flex-1 p-10 bg-white shadow-xl mx-auto w-3/4 text-center"
-        initial={{ opacity: 0, x: "100%" }}  // Starts from the right
-        animate={{ opacity: 1, x: 0 }}      // Moves to center
-        exit={{ opacity: 0, x: "-100%" }}   // Moves to the left when exiting
-        transition={{ duration: 0.8 }}      // Transition duration
+        initial={{ opacity: 0, x: "100%" }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: "-100%" }}
+        transition={{ duration: 0.8 }}
       >
         <motion.h2
-          className="report-heading text-3xl mb-10 text-blue font-extrabold"
+          className="report-heading text-3xl mb-6 text-blue font-extrabold"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.5 }} // Add a delay for the text pop-up effect
+          transition={{ duration: 0.8, delay: 0.5 }}
         >
           Weekly Attendance Report
         </motion.h2>
+
+        <div className="mb-8 flex items-center justify-center gap-4">
+          <select
+            className="border border-gray-300 rounded-md px-4 py-2 text-sm"
+            value={exportType}
+            onChange={(e) => setExportType(e.target.value)}
+          >
+            <option value="all">Export All</option>
+            <option value="students">Export Students Only</option>
+            <option value="supervisors">Export Supervisors Only</option>
+          </select>
+          <button
+            className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700"
+            onClick={handleExport}
+          >
+            Export DOCX
+          </button>
+        </div>
+
         {loading ? (
           <p className="text-center text-gray-600">Loading...</p>
         ) : error ? (
