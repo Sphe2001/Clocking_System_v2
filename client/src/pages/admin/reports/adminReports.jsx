@@ -124,7 +124,7 @@ const Reports = ({ isProfileOpen }) => {
               (person) =>
                 new Paragraph(
                   `${person.surname || person.name || "-"} (${
-                    person.student_number || person.staff_number || "-"
+                    person.studentNo || person.staffNo || "-"
                   }) - ` +
                     `Mon: ${person.monday ? "Present" : "Absent"}, ` +
                     `Tue: ${person.tuesday ? "Present" : "Absent"}, ` +
