@@ -10,7 +10,11 @@ const AttendanceTable = ({ title, data, isProfileOpen }) => (
     <h3 className="table-title text-lg font-bold mb-3 text-center">{title}</h3>
     <div className="overflow-y-auto shadow-lg rounded-xl bg-white">
       <table className="w-full table-auto border-collapse border border-gray-300">
-        <thead className={`bg-blue-600 text-white top-0 ${isProfileOpen ? "hidden" : ""}`}>
+        <thead
+          className={`bg-blue-600 text-white top-0 ${
+            isProfileOpen ? "hidden" : ""
+          }`}
+        >
           <tr className="text-sm text-gray-100">
             <th className="p-4 border-b text-left">Surname</th>
             <th className="p-4 border-b text-left">Staff/Student Number</th>
@@ -23,18 +27,28 @@ const AttendanceTable = ({ title, data, isProfileOpen }) => (
         </thead>
         <tbody>
           {data.map((person, index) => {
-            // Ensure both staff_number and student_number are displayed dynamically
-            const id = person.staff_number || person.student_number || "-";
+            // Ensure both staffNo and studentNo are displayed dynamically
+            const id = person.staffNo || person.studentNo || "-"; // Updated field names
             const surname = person.surname || person.name || "-"; // Assuming surname or name exists
             return (
               <tr key={index} className="text-sm text-gray-700">
                 <td className="p-4 border-b">{surname}</td>
                 <td className="p-4 border-b">{id}</td>
-                <td className="p-4 border-b text-center">{person.monday ? "Present" : "Absent"}</td>
-                <td className="p-4 border-b text-center">{person.tuesday ? "Present" : "Absent"}</td>
-                <td className="p-4 border-b text-center">{person.wednesday ? "Present" : "Absent"}</td>
-                <td className="p-4 border-b text-center">{person.thursday ? "Present" : "Absent"}</td>
-                <td className="p-4 border-b text-center">{person.friday ? "Present" : "Absent"}</td>
+                <td className="p-4 border-b text-center">
+                  {person.monday ? "Present" : "Absent"}
+                </td>
+                <td className="p-4 border-b text-center">
+                  {person.tuesday ? "Present" : "Absent"}
+                </td>
+                <td className="p-4 border-b text-center">
+                  {person.wednesday ? "Present" : "Absent"}
+                </td>
+                <td className="p-4 border-b text-center">
+                  {person.thursday ? "Present" : "Absent"}
+                </td>
+                <td className="p-4 border-b text-center">
+                  {person.friday ? "Present" : "Absent"}
+                </td>
               </tr>
             );
           })}
@@ -43,7 +57,6 @@ const AttendanceTable = ({ title, data, isProfileOpen }) => (
     </div>
   </div>
 );
-
 
 // Main Reports Component
 const Reports = ({ isProfileOpen }) => {
@@ -57,7 +70,9 @@ const Reports = ({ isProfileOpen }) => {
     const fetchData = async () => {
       try {
         const [supervisorRes, studentRes] = await Promise.all([
-          fetch("http://localhost:3001/api/admin/fetchAllSupervisorUsers/supervisorUsers"),
+          fetch(
+            "http://localhost:3001/api/admin/fetchAllSupervisorUsers/supervisorUsers"
+          ),
           fetch("http://localhost:3001/api/admin/fetchAllStudentUsers/users"),
         ]);
 
@@ -105,15 +120,18 @@ const Reports = ({ isProfileOpen }) => {
                 new TextRun("\n\n"),
               ],
             }),
-            ...data.map((person) =>
-              new Paragraph(
-                `${person.surname || person.name || "-"} (${person.student_number || person.staff_number || "-"}) - ` +
-                `Mon: ${person.monday ? "Present" : "Absent"}, ` +
-                `Tue: ${person.tuesday ? "Present" : "Absent"}, ` +
-                `Wed: ${person.wednesday ? "Present" : "Absent"}, ` +
-                `Thu: ${person.thursday ? "Present" : "Absent"}, ` +
-                `Fri: ${person.friday ? "Present" : "Absent"}`
-              )
+            ...data.map(
+              (person) =>
+                new Paragraph(
+                  `${person.surname || person.name || "-"} (${
+                    person.student_number || person.staff_number || "-"
+                  }) - ` +
+                    `Mon: ${person.monday ? "Present" : "Absent"}, ` +
+                    `Tue: ${person.tuesday ? "Present" : "Absent"}, ` +
+                    `Wed: ${person.wednesday ? "Present" : "Absent"}, ` +
+                    `Thu: ${person.thursday ? "Present" : "Absent"}, ` +
+                    `Fri: ${person.friday ? "Present" : "Absent"}`
+                )
             ),
           ],
         },
@@ -170,12 +188,32 @@ const Reports = ({ isProfileOpen }) => {
           <div className="tables-wrapper">
             {exportType === "all" && (
               <>
-                <AttendanceTable title="Supervisors" data={supervisors} isProfileOpen={isProfileOpen} />
-                <AttendanceTable title="Students" data={students} isProfileOpen={isProfileOpen} />
+                <AttendanceTable
+                  title="Supervisors"
+                  data={supervisors}
+                  isProfileOpen={isProfileOpen}
+                />
+                <AttendanceTable
+                  title="Students"
+                  data={students}
+                  isProfileOpen={isProfileOpen}
+                />
               </>
             )}
-            {exportType === "students" && <AttendanceTable title="Students" data={students} isProfileOpen={isProfileOpen} />}
-            {exportType === "supervisors" && <AttendanceTable title="Supervisors" data={supervisors} isProfileOpen={isProfileOpen} />}
+            {exportType === "students" && (
+              <AttendanceTable
+                title="Students"
+                data={students}
+                isProfileOpen={isProfileOpen}
+              />
+            )}
+            {exportType === "supervisors" && (
+              <AttendanceTable
+                title="Supervisors"
+                data={supervisors}
+                isProfileOpen={isProfileOpen}
+              />
+            )}
           </div>
         )}
       </motion.main>
