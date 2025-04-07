@@ -33,7 +33,9 @@ app.use("/api", getHoursWorked)
 app.use("/api", earlyLeave);
 app.use("/api/admin/fetchAllStudentUsers", usersRoutes);
 app.use("/api/admin/fetchAllSupervisorUsers", supervisorUsersRoutes);
-
+app.use("/api", checkRequestStatus);
+app.use("/api",approveRequest);
+app.use("/api",requestReview);
 
 
 
