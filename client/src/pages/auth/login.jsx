@@ -57,7 +57,7 @@ export default function LoginPage() {
           <img
             alt="TUT Logo"
             src="https://www.accord.org.za/wp-content/uploads/2016/09/TUT-Logo1.jpg"
-            className="h-24 w-24 mb-4 rounded-full justify-center item-center "
+            className="h-24 w-24 object-cover rounded-md mb-4"
           />
           <h2 className="text-center text-3xl font-bold  tracking-tight text-gray-900">
             Sign in to your account
