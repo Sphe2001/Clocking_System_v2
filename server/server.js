@@ -37,10 +37,10 @@ app.use("/api/admin/fetchAllStudentUsers", usersRoutes);
 app.use("/api/admin/fetchAllSupervisorUsers", supervisorUsersRoutes);
 app.use("/api", supervisorClockInRoute);
 app.use("/api", supervisorClockOutRoute);
-app.use("/api", checkRequestStatus);
-app.use("/api", approveRequest);
-app.use("/api", requestReview);
-app.use("/api", fetchUsers);
+//app.use("/api", checkRequestStatus);
+//app.use("/api", approveRequest);
+//app.use("/api", requestReview);
+//app.use("/api", fetchUsers);
 
 
 
