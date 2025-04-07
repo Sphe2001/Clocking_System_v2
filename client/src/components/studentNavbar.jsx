@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { UserIcon, DeviceTabletIcon, PowerIcon } from "@heroicons/react/24/outline";
+import { ClockIcon, PowerIcon } from "@heroicons/react/24/outline";
+import { UserIcon } from "@heroicons/react/24/solid";
 
 const StudentNavbar = () => {
   const location = useLocation();
@@ -31,46 +32,43 @@ const StudentNavbar = () => {
   };
 
   return (
-    <nav className="bg-gradient-to-b from-blue-100 to-blue-500 text-white p-5 mr-5 shadow-md w-full backdrop-blur-md rounded-lg shadow-lg">
-      <div className="container mx-auto flex p-3 justify-between items-center">
-        {/* Dashboard Title */}
-        <h1
-          className={`text-4xl font-bold cursor-pointer font-serif hover:text-blue-500 ${activeIcon === 'dashboard' ? 'animate-bounce' : ''}`}
-          onClick={handleDashboardClick}
+    <nav className="bg-blue-500 text-white font-black p-5 shadow-md w-full backdrop-blur-md rounded-lg flex justify-between items-center">
+      <h1
+        className={`text-4xl cursor-pointer font-serif hover:text-blue-500 ${activeIcon === 'dashboard' ? 'animate-bounce' : ''}`}
+        onClick={handleDashboardClick}
+      >
+        Student Dashboard
+      </h1>
+
+      {/* Navbar Links */}
+      <div className="flex space-x-10">
+        {/* View Profile */}
+        <div
+          className={`flex items-center cursor-pointer ${activeIcon === 'profile' ? 'animate-bounce' : ''}`}
+          onClick={handleProfileClick}
         >
-          Student Dashboard
-        </h1>
+          <UserIcon className="mx-1 h-6 w-10 text-yellow-200" />
+          <span className={location.pathname === '/pages/student/viewProfile' ? 'text-red-300' : ''}>View Profile</span>
+        </div>
 
-        {/* Navbar Links */}
-        <div className="flex space-x-8">
-          {/* View Profile */}
-          <div
-            className={`flex items-center cursor-pointer ${activeIcon === 'profile' ? 'animate-bounce' : ''}`}
-            onClick={handleProfileClick}
-          >
-            <UserIcon className="mx-1 h-6 w-6 stroke-green-400" />
-            <span className={location.pathname === '/pages/student/viewProfile' ? 'text-red-300' : ''}>View Profile</span>
-          </div>
+        {/* View Attendance */}
+        <div
+          className={`flex items-center cursor-pointer ${activeIcon === 'attendance' ? 'animate-bounce' : ''}`}
+          onClick={handleAttendanceClick}
+        >
+          <ClockIcon className="mx-1 h-6 w-10 stroke-yellow-200 drop-shadow-md" strokeWidth={2.5}/>
+          <span className={location.pathname === '/pages/student/viewProfile' ? 'text-gray-300' : ''}>View Attendance History</span>
+        </div>
 
-          {/* View Attendance */}
-          <div
-            className={`flex items-center cursor-pointer ${activeIcon === 'attendance' ? 'animate-bounce' : ''}`}
-            onClick={handleAttendanceClick}
-          >
-            <DeviceTabletIcon className="mx-1 h-6 w-6 stroke-green-400" />
-            <span className={location.pathname === '/pages/student/viewProfile' ? 'text-gray-300' : ''}>View Attendance History</span>
-          </div>
-
-          {/* Logout Button */}
-          <div
-            className={`flex items-center cursor-pointer ${activeIcon === 'logout' ? 'animate-bounce' : ''}`}
-            onClick={handleLogout}
-          >
-            <PowerIcon className="mx-1 h-6 w-6 stroke-green-400" />
-            <button className="bg-red-600 text-lg font-semibold rounded-lg p-1 hover:bg-red-300">
-              Logout
-            </button>
-          </div>
+        {/* Logout Button */}
+        <div
+          className={`flex items-center cursor-pointer ${activeIcon === 'logout' ? 'animate-bounce' : ''}`}
+          onClick={handleLogout}
+        >
+          <PowerIcon className="mx-1 h-6 w-10 stroke-red-400 drop-shadow-md" strokeWidth={2.5} />
+          <button className="text-lg font-semibold rounded-lg p-1 hover:bg-red-300">
+            Logout
+          </button>
         </div>
       </div>
     </nav>

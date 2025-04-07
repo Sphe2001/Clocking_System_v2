@@ -14,8 +14,9 @@ router.post("/logout", async (req, res) => {
             sameSite: "Strict",
             expires: new Date(0)
         });
+        const redirectURL = "/login"
 
-        res.status(200).json({ message: "Logout successful", success: true });
+        res.status(200).json({ message: "Logout successful", success: true , redirectURL});
 
     } catch (error) {
         console.error("Error during logout:", error);
