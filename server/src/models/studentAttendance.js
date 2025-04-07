@@ -27,7 +27,7 @@ const StudentAttendance = sequelize.define(
     },
   },
   {
-    timestamps: false,
+    timestamps: true,
   }
 );
 
