@@ -12,7 +12,7 @@ function AllUsers() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:3001/api/admin/fetchAllStudentUsers");
+        const response = await fetch("http://localhost:3001/api/admin/fetchAllStudentUsers/users");
         const data = await response.json();
         setUsers(data);
       } catch (error) {
@@ -27,7 +27,7 @@ function AllUsers() {
   useEffect(() => {
     const fetchSupervisors = async () => {
       try {
-        const response = await fetch("http://localhost:3001/api/admin/fetchAllSupervisorUsers");
+        const response = await fetch("http://localhost:3001/api/admin/fetchAllSupervisorUsers/supervisorUsers");
         const data = await response.json();
         setSupervisors(data);
       } catch (error) {
@@ -59,7 +59,7 @@ function AllUsers() {
     <div className="flex min-h-screen bg-gray-50">
       <Sidebar />
       <motion.main
-        className="flex-1 p-10 bg-white shadow-xl w-full flex flex-col items-center  ml-64 flex flex-col items-center justify-center"
+        className="flex-1 p-10 bg-white shadow-xl w-full flex flex-col items-center ml-64 flex flex-col items-center justify-center"
         initial={{ opacity: 0, x: "100%" }}  // Starts from the right
         animate={{ opacity: 1, x: 0 }}      // Moves to center
         exit={{ opacity: 0, x: "-100%" }}   // Moves to the left when exiting
@@ -126,6 +126,7 @@ function AllUsers() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.9 }}
           >
+            {/* Students Table */}
             <motion.h2
               className="text-xl mb-4 text-center"
               initial={{ opacity: 0 }}
@@ -168,6 +169,53 @@ function AllUsers() {
                       <td className="p-4 border-b">{user.email}</td>
                       <td className="p-4 border-b">{user.contactNo}</td>
                       <td className="p-4 border-b">{user.verified ? "True" : "False"}</td>
+                    </motion.tr>
+                  ))}
+                </tbody>
+              </table>
+            </motion.div>
+
+            {/* Supervisors Table */}
+            <motion.h2
+              className="text-xl mt-10 mb-4 text-center"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 1.2 }}  // Content fades in after students section
+            >
+              Supervisors
+            </motion.h2>
+            <motion.div
+              className="overflow-x-auto shadow-lg rounded-xl bg-white w-3/4"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.9 }}
+            >
+              <table className="w-full border-collapse border border-gray-300 text-center">
+                <thead className="bg-blue-100">
+                  <tr className="text-sm text-gray-700">
+                    <th className="p-4 border-b">Staff Number</th>
+                    <th className="p-4 border-b">Surname</th>
+                    <th className="p-4 border-b">Email</th>
+                    <th className="p-4 border-b">Role</th>
+                    <th className="p-4 border-b">Contact No</th>
+                    <th className="p-4 border-b">Specialization</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredSupervisors.map((supervisor, index) => (
+                    <motion.tr
+                      key={index}
+                      className="text-sm text-gray-700"
+                      initial={{ y: 20, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      transition={{ duration: 0.9, delay: index * 0.1 }}
+                    >
+                      <td className="p-4 border-b">{supervisor.staffNo}</td>
+                      <td className="p-4 border-b">{supervisor.surname}</td>
+                      <td className="p-4 border-b">{supervisor.email}</td>
+                      <td className="p-4 border-b">{supervisor.role}</td>
+                      <td className="p-4 border-b">{supervisor.contactNo}</td>
+                      <td className="p-4 border-b">{supervisor.specialization}</td>
                     </motion.tr>
                   ))}
                 </tbody>
