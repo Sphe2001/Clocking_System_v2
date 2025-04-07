@@ -27,7 +27,7 @@ const SupervisorAttendance = sequelize.define(
     },
   },
   {
-    timestamps: false,
+    timestamps: true,
   }
 );
 
