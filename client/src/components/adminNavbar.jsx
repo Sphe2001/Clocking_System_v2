@@ -1,11 +1,16 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 
 const Sidebar = ({ setProfileModalState }) => {
+  const domain = import.meta.env.VITE_REACT_APP_DOMAIN;
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [profilePic, setProfilePic] = useState(localStorage.getItem("profilePic") || "/default-avatar.png");
+  const [profilePic, setProfilePic] = useState(
+    localStorage.getItem("profilePic") || "/default-avatar.png"
+  );
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [username] = useState("Admin User");
   const [email, setEmail] = useState("admin2@tut.ac.za");
@@ -29,9 +34,25 @@ const Sidebar = ({ setProfileModalState }) => {
     if (setProfileModalState) setProfileModalState(newState);
   };
 
-  const handleLogout = () => {
-    if (window.confirm("Are you sure you want to log out?")) {
-      navigate("/adminlogin");
+  const handleLogout = async () => {
+    try {
+      const response = await axios.get(`${domain}/api/auth/logout`, {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      toast.success(response.data?.message || "Logged out successfully");
+      navigate(response.data?.redirectUrl || "/login"); // fallback to login if redirectUrl is missing
+    } catch (error) {
+      console.error(error);
+      const errorMessage =
+        error.response?.data?.error ||
+        error.response?.data?.message ||
+        "Logout failed";
+
+      toast.error(errorMessage);
     }
   };
 
@@ -49,19 +70,22 @@ const Sidebar = ({ setProfileModalState }) => {
       <h1 className="text-2xl font-bold text-center mb-6">ADMIN PANEL</h1>
 
       <nav className="flex-grow">
-        {[{ path: "/dashboard/admin", label: "🏠 Dashboard" },
+        {[
+          { path: "/dashboard/admin", label: "🏠 Dashboard" },
           { path: "/dashboard/admin/users", label: "👥 Users" },
-          { path: "/dashboard/admin/reports", label: "📊 Reports" }]
-          .map(({ path, label }) => (
-            <div
-              key={path}
-              className={`p-3 cursor-pointer rounded transition-colors duration-300 ${location.pathname === path ? "bg-blue-700" : "hover:bg-blue-600"}`}
-              onClick={() => navigate(path)}
-            >
-              {label}
-            </div>
+          { path: "/dashboard/admin/reports", label: "📊 Reports" },
+        ].map(({ path, label }) => (
+          <div
+            key={path}
+            className={`p-3 cursor-pointer rounded transition-colors duration-300 ${
+              location.pathname === path ? "bg-blue-700" : "hover:bg-blue-600"
+            }`}
+            onClick={() => navigate(path)}
+          >
+            {label}
+          </div>
         ))}
-        
+
         <button
           className="w-full cursor-pointer p-3 bg-transparent hover:bg-blue-600 text-blue-600 hover:text-white rounded transition-colors duration-300 mt-4"
           onClick={handleProfileModalToggle}
@@ -80,7 +104,9 @@ const Sidebar = ({ setProfileModalState }) => {
       {isProfileOpen && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50">
           <div className="bg-white p-8 rounded-lg w-96 shadow-lg">
-            <h2 className="text-3xl font-semibold text-gray-800 mb-4 text-center">Admin Profile</h2>
+            <h2 className="text-3xl font-semibold text-gray-800 mb-4 text-center">
+              Admin Profile
+            </h2>
 
             <div className="flex justify-center mb-4">
               <label className="relative w-32 h-32 cursor-pointer">
@@ -97,10 +123,14 @@ const Sidebar = ({ setProfileModalState }) => {
                 />
               </label>
             </div>
-            <p className="text-gray-600 text-sm text-center">Click to change profile picture</p>
+            <p className="text-gray-600 text-sm text-center">
+              Click to change profile picture
+            </p>
 
             <div className="mt-6 bg-gray-200 p-6 rounded-lg shadow-lg">
-              <p className="text-xl font-semibold text-black text-center">{username}</p>
+              <p className="text-xl font-semibold text-black text-center">
+                {username}
+              </p>
               <input
                 type="email"
                 value={email}
