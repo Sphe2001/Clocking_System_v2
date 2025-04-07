@@ -7,7 +7,7 @@ const StudentDashboard = () => {
       
       {/* Main Content Section (includes Navbar) */}
       <div className="flex flex-col items-center justify-center flex-grow text-white px-6 sm:px-8 md:px-12">
-        <div className="w-full  bg-blue-800 text-center rounded-lg shadow-lg p-10 space-y-8">
+        <div className="w-300  bg-blue-800 text-center rounded-lg shadow-lg p-10 space-y-8">
           
           {/* Navbar */}
           <StudentNavbar />
