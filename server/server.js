@@ -13,6 +13,11 @@ const adminRoutes = require("./src/routes/admin/adminRoutes");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 
+
+const supervisorClockInRoute = require("./src/routes/supervisor/clock_in");
+const supervisorClockOutRoute = require("./src/routes/supervisor/clock_out");
+
+
 const app = express();
 
 dotenv.config();
@@ -34,10 +39,21 @@ app.use("/api", clockin);
 app.use("/api", clockout);
 app.use("/api", getHoursWorked);
 app.use("/api", earlyLeave);
+
 app.use("/api", fecthUsers);
 app.use("/api", fetchAttendance);
 app.use("/api", weekRecords);
 app.use("/api", adminRoutes);
+
+app.use("/api", supervisorClockInRoute);
+app.use("/api", supervisorClockOutRoute);
+app.use("/api", checkRequestStatus);
+app.use("/api", approveRequest);
+app.use("/api", requestReview);
+
+
+
+
 
 // Test database connection
 sequelize
