@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom"; // Correct import for React Router v6
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
-import { FaUser } from "react-icons/fa"; // Importing user icon from react-icons
+import { FaUser } from "react-icons/fa";
+import { motion } from "framer-motion"; // Importing motion from framer-motion
 
 export default function AdminLogin() {
   const domain = import.meta.env.VITE_REACT_APP_DOMAIN;
-  const navigate = useNavigate(); // Use useNavigate instead of useHistory
+  const navigate = useNavigate();
 
   const [user, setUser] = useState({
     email: "",
@@ -25,7 +26,7 @@ export default function AdminLogin() {
 
     try {
       const response = await axios.post(
-        `${domain}/api/admin/login`, // Update the API endpoint to reflect admin login
+        `${domain}/api/admin/login`,
         user,
         {
           withCredentials: true,
@@ -37,8 +38,7 @@ export default function AdminLogin() {
 
       toast.success("Login successful");
 
-      // Redirect to admin dashboard after successful login
-      navigate("dashboard/admin"); // Navigate to the admin dashboard or home route
+      navigate("dashboard/admin");
     } catch (error) {
       console.error(error);
       const errorMessage =
@@ -51,11 +51,11 @@ export default function AdminLogin() {
   };
 
   const navigateToUserLogin = () => {
-    navigate("/login"); // Navigate to user login page
+    navigate("/login");
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-yellow-200 via-yellow-300 to-yellow-500">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-yellow-200 via-yellow-300 to-yellow-500 relative">
       <Toaster />
 
       {/* User Login button in the top left corner */}
@@ -66,7 +66,13 @@ export default function AdminLogin() {
         <FaUser className="mr-2" /> User Login
       </button>
 
-      <div className="w-full max-w-md p-8 bg-white shadow-lg rounded-lg sm:max-w-lg md:max-w-xl">
+      {/* Animated login card */}
+      <motion.div
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="w-full max-w-md p-8 bg-white shadow-lg rounded-lg sm:max-w-lg md:max-w-xl"
+      >
         <div className="flex flex-col items-center">
           <img
             alt="Admin Logo"
@@ -130,7 +136,7 @@ export default function AdminLogin() {
             {loading ? "Signing in..." : "Sign in"}
           </button>
         </form>
-      </div>
+      </motion.div>
     </div>
   );
 }

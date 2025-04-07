@@ -5,8 +5,8 @@ import toast, { Toaster } from "react-hot-toast";
 import { motion } from "framer-motion"; // Import motion for animations
 
 export default function LoginPage() {
-  const domain = import.meta.env.VITE_REACT_APP_DOMAIN; 
-  const navigate = useNavigate(); 
+  const domain = import.meta.env.VITE_REACT_APP_DOMAIN;
+  const navigate = useNavigate();
 
   const [user, setUser] = useState({
     email: "",
@@ -22,7 +22,7 @@ export default function LoginPage() {
   const onLogin = async (event) => {
     event.preventDefault();
     setLoading(true);
-  
+
     try {
       const response = await axios.post(
         `${domain}/api/auth/login`,
@@ -34,15 +34,14 @@ export default function LoginPage() {
           },
         }
       );
-  
+
       toast.success("Login successful");
-  
       navigate(response.data?.redirectUrl);
     } catch (error) {
       console.error(error);
       const errorMessage =
         error.response?.data?.error || error.response?.data?.message || "Login failed";
-        
+
       toast.error(errorMessage);
     } finally {
       setLoading(false);
@@ -50,14 +49,13 @@ export default function LoginPage() {
   };
 
   const goToAdminLogin = () => {
-    // Navigate to admin login page
     navigate("/dashboard/admin/login");
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-yellow-200 via-yellow-300 to-yellow-500 relative">
-      <Toaster /> 
-      
+      <Toaster />
+
       {/* Admin Login and User Icon in the top right */}
       <div className="absolute top-4 right-8 flex items-center space-x-4">
         <motion.a
@@ -71,11 +69,17 @@ export default function LoginPage() {
           whileHover={{ scale: 1.2 }}
           whileTap={{ scale: 0.9 }}
         >
-          <span className="text-sm font-bold">U</span> {/* You can replace this with a user icon */}
+          <span className="text-sm font-bold">U</span>
         </motion.div>
       </div>
 
-      <div className="w-full max-w-md p-8 bg-white shadow-lg rounded-lg sm:max-w-lg md:max-w-xl z-10">
+      {/* Animated Login Form (Slide from Bottom) */}
+      <motion.div
+        initial={{ y: 100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="w-full max-w-md p-8 bg-white shadow-lg rounded-lg sm:max-w-lg md:max-w-xl z-10"
+      >
         <div className="flex flex-col items-center">
           <img
             alt="TUT Logo"
@@ -98,8 +102,8 @@ export default function LoginPage() {
               type="email"
               required
               autoComplete="email"
-              value={user.email} 
-              onChange={(e) => setUser({ ...user, email: e.target.value })} 
+              value={user.email}
+              onChange={(e) => setUser({ ...user, email: e.target.value })}
               className="mt-2 block w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring focus:ring-indigo-300"
             />
           </div>
@@ -114,8 +118,8 @@ export default function LoginPage() {
               type="password"
               required
               autoComplete="current-password"
-              value={user.password} 
-              onChange={(e) => setUser({ ...user, password: e.target.value })} 
+              value={user.password}
+              onChange={(e) => setUser({ ...user, password: e.target.value })}
               className="mt-2 block w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring focus:ring-indigo-300"
             />
             <div className="mt-2 text-right">
@@ -141,7 +145,7 @@ export default function LoginPage() {
             Sign-up here
           </a>
         </p>
-      </div>
+      </motion.div>
     </div>
   );
 }
