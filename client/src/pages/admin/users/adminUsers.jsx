@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Sidebar from "../../../components/adminNavbar";
+import { fetchSupervisors, fetchStudents } from "../../../../../server/src/helpers/fetchUsers";
 
 function AllUsers() {
   const [filter, setFilter] = useState("All");
@@ -9,32 +10,21 @@ function AllUsers() {
   const [supervisors, setSupervisors] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Fetch users and supervisors using the API service
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:3001/api/admin/fetchAllStudentUsers/users");
-        const data = await response.json();
-        setUsers(data);
+        const userData = await fetchStudents();
+        setUsers(userData);
+        const supervisorData = await fetchSupervisors();
+        setSupervisors(supervisorData);
       } catch (error) {
-        console.error("Error fetching users:", error);
+        console.error("Error fetching data:", error);
       } finally {
         setLoading(false);
       }
     };
     fetchData();
-  }, []);
-
-  useEffect(() => {
-    const fetchSupervisors = async () => {
-      try {
-        const response = await fetch("http://localhost:3001/api/admin/fetchAllSupervisorUsers/supervisorUsers");
-        const data = await response.json();
-        setSupervisors(data);
-      } catch (error) {
-        console.error("Error fetching supervisors:", error);
-      }
-    };
-    fetchSupervisors();
   }, []);
 
   const filteredUsers = users.filter((user) => {

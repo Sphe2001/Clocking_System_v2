@@ -1,6 +1,9 @@
+// AdminDashboard.js
+
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Sidebar from "../../components/adminNavbar";
+import { fetchUsersData } from "../../../../server/src/helpers/fetchUsers";
 
 function AdminDashboard() {
   const [filter, setFilter] = useState("All");
@@ -12,48 +15,10 @@ function AdminDashboard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const studentsResponse = await fetch("http://localhost:3001/api/admin/fetchAllStudentUsers/users");
-        const supervisorsResponse = await fetch("http://localhost:3001/api/admin/fetchAllSupervisorUsers/supervisorUsers");
-
-        const studentsData = await studentsResponse.json();
-        const supervisorsData = await supervisorsResponse.json();
-
-        const formattedStudents = studentsData.map(student => ({
-          studentNo: student.studentNo,
-          surname: student.surname,
-          role: "Student",
-          clockIn: student.clock_in_time || "N/A",
-          clockOut: student.clock_out_time || "N/A"
-        }));
-
-        const formattedSupervisors = supervisorsData.map(supervisor => ({
-          staffNo: supervisor.staffNo,
-          surname: supervisor.surname,
-          role: "Supervisor",
-          clockIn: supervisor.clock_in_time || "N/A",
-          clockOut: supervisor.clock_out_time || "N/A"
-        }));
-
-        // Combine both student and supervisor data
-        const allUsers = [...formattedStudents, ...formattedSupervisors];
-
-        // Sort users by clockIn time (latest clock-in first)
-        allUsers.sort((a, b) => {
-          const clockInA = a.clockIn === "N/A" ? null : new Date(a.clockIn);
-          const clockInB = b.clockIn === "N/A" ? null : new Date(b.clockIn);
-          
-          // If clockIn time is missing (N/A), place that entry at the bottom
-          if (!clockInA && !clockInB) return 0;
-          if (!clockInA) return 1;
-          if (!clockInB) return -1;
-
-          return clockInB - clockInA; // Sort in descending order (latest first)
-        });
-
-        // Update the state with users and counts
+        const { allUsers, studentCount, supervisorCount } = await fetchUsersData();
         setUsers(allUsers.slice(0, 10)); // Limit to 10 records
-        setStudentCount(formattedStudents.length); // Total students
-        setSupervisorCount(formattedSupervisors.length); // Total supervisors
+        setStudentCount(studentCount); // Total students
+        setSupervisorCount(supervisorCount); // Total supervisors
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);

@@ -1,8 +1,11 @@
+// src/components/Reports.js
+
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Sidebar from "../../../components/adminNavbar";
 import { Document, Packer, Paragraph, TextRun } from "docx";
 import { saveAs } from "file-saver";
+import { fetchSupervisors, fetchStudents } from "../../../../../server/src/helpers/fetchUsers";
 
 // Reusable Attendance Table Component
 const AttendanceTable = ({ title, data, isProfileOpen }) => (
@@ -27,9 +30,8 @@ const AttendanceTable = ({ title, data, isProfileOpen }) => (
         </thead>
         <tbody>
           {data.map((person, index) => {
-            // Ensure both staffNo and studentNo are displayed dynamically
-            const id = person.staffNo || person.studentNo || "-"; // Updated field names
-            const surname = person.surname || person.name || "-"; // Assuming surname or name exists
+            const id = person.staffNo || person.studentNo || "-";
+            const surname = person.surname || person.name || "-";
             return (
               <tr key={index} className="text-sm text-gray-700">
                 <td className="p-4 border-b">{surname}</td>
@@ -69,22 +71,13 @@ const Reports = ({ isProfileOpen }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [supervisorRes, studentRes] = await Promise.all([
-          fetch(
-            "http://localhost:3001/api/admin/fetchAllSupervisorUsers/supervisorUsers"
-          ),
-          fetch("http://localhost:3001/api/admin/fetchAllStudentUsers/users"),
+        const [supervisorData, studentData] = await Promise.all([
+          fetchSupervisors(),
+          fetchStudents(),
         ]);
 
-        if (!supervisorRes.ok || !studentRes.ok) {
-          throw new Error("Failed to fetch attendance data");
-        }
-
-        const supervisorsData = await supervisorRes.json();
-        const studentsData = await studentRes.json();
-
-        setSupervisors(supervisorsData);
-        setStudents(studentsData);
+        setSupervisors(supervisorData);
+        setStudents(studentData);
       } catch (err) {
         setError(err.message);
       } finally {

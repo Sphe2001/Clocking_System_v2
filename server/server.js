@@ -12,6 +12,7 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const supervisorClockInRoute = require("./src/routes/supervisor/clock_in");
 const supervisorClockOutRoute = require("./src/routes/supervisor/clock_out");
+const fetchUsers = require(".src/helpers/fetchUsers");
 
 const app = express();
 
@@ -39,6 +40,7 @@ app.use("/api", supervisorClockOutRoute);
 app.use("/api", checkRequestStatus);
 app.use("/api", approveRequest);
 app.use("/api", requestReview);
+app.use("/api", fetchUsers);
 
 
 
