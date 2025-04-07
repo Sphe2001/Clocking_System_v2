@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; // Correct import for React Router v6
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
-import { motion } from "framer-motion"; // Import motion for animations
+import { FaUser } from "react-icons/fa"; // Importing user icon from react-icons
 
-export default function LoginPage() {
-  const domain = import.meta.env.VITE_REACT_APP_DOMAIN; 
-  const navigate = useNavigate(); 
+export default function AdminLogin() {
+  const domain = import.meta.env.VITE_REACT_APP_DOMAIN;
+  const navigate = useNavigate(); // Use useNavigate instead of useHistory
 
   const [user, setUser] = useState({
     email: "",
@@ -22,10 +22,10 @@ export default function LoginPage() {
   const onLogin = async (event) => {
     event.preventDefault();
     setLoading(true);
-  
+
     try {
       const response = await axios.post(
-        `${domain}/api/auth/login`,
+        `${domain}/api/admin/login`, // Update the API endpoint to reflect admin login
         user,
         {
           withCredentials: true,
@@ -34,63 +34,54 @@ export default function LoginPage() {
           },
         }
       );
-  
+
       toast.success("Login successful");
-  
-      navigate(response.data?.redirectUrl);
+
+      // Redirect to admin dashboard after successful login
+      navigate("dashboard/admin"); // Navigate to the admin dashboard or home route
     } catch (error) {
       console.error(error);
       const errorMessage =
         error.response?.data?.error || error.response?.data?.message || "Login failed";
-        
+
       toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
   };
 
-  const goToAdminLogin = () => {
-    // Navigate to admin login page
-    navigate("/dashboard/admin/login");
+  const navigateToUserLogin = () => {
+    navigate("/login"); // Navigate to user login page
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-yellow-200 via-yellow-300 to-yellow-500 relative">
-      <Toaster /> 
-      
-      {/* Admin Login and User Icon in the top right */}
-      <div className="absolute top-4 right-8 flex items-center space-x-4">
-        <motion.a
-          href="/dashboard/admin/login"
-          className="text-lg font-semibold text-indigo-600 hover:text-indigo-500 transition duration-300"
-        >
-          Admin Login
-        </motion.a>
-        <motion.div
-          className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center text-white"
-          whileHover={{ scale: 1.2 }}
-          whileTap={{ scale: 0.9 }}
-        >
-          <span className="text-sm font-bold">U</span> {/* You can replace this with a user icon */}
-        </motion.div>
-      </div>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-yellow-200 via-yellow-300 to-yellow-500">
+      <Toaster />
 
-      <div className="w-full max-w-md p-8 bg-white shadow-lg rounded-lg sm:max-w-lg md:max-w-xl z-10">
+      {/* User Login button in the top left corner */}
+      <button
+        onClick={navigateToUserLogin}
+        className="absolute top-5 left-5 flex items-center p-2 bg-indigo-600 text-white rounded-lg shadow-md hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+      >
+        <FaUser className="mr-2" /> User Login
+      </button>
+
+      <div className="w-full max-w-md p-8 bg-white shadow-lg rounded-lg sm:max-w-lg md:max-w-xl">
         <div className="flex flex-col items-center">
           <img
-            alt="TUT Logo"
+            alt="Admin Logo"
             src="https://www.accord.org.za/wp-content/uploads/2016/09/TUT-Logo1.jpg"
             className="h-24 w-24 object-cover rounded-md mb-4"
           />
           <h2 className="text-center text-2xl font-bold tracking-tight text-gray-900">
-            Sign in to your account
+            Admin Sign in
           </h2>
         </div>
 
         <form onSubmit={onLogin} className="mt-6 space-y-6">
           <div className="flex flex-col">
             <label htmlFor="email" className="text-sm font-medium text-gray-900 text-left">
-              Email address
+              Admin Email address
             </label>
             <input
               id="email"
@@ -98,15 +89,16 @@ export default function LoginPage() {
               type="email"
               required
               autoComplete="email"
-              value={user.email} 
-              onChange={(e) => setUser({ ...user, email: e.target.value })} 
+              value={user.email}
+              onChange={(e) => setUser({ ...user, email: e.target.value })}
               className="mt-2 block w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring focus:ring-indigo-300"
+              placeholder="email@tut.ac.za"
             />
           </div>
 
           <div className="flex flex-col">
             <label htmlFor="password" className="text-sm font-medium text-gray-900 text-left">
-              Password
+              Admin Password
             </label>
             <input
               id="password"
@@ -114,12 +106,16 @@ export default function LoginPage() {
               type="password"
               required
               autoComplete="current-password"
-              value={user.password} 
-              onChange={(e) => setUser({ ...user, password: e.target.value })} 
+              value={user.password}
+              onChange={(e) => setUser({ ...user, password: e.target.value })}
               className="mt-2 block w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring focus:ring-indigo-300"
+              placeholder="********"
             />
             <div className="mt-2 text-right">
-              <a href="/forgotpassword" className="text-sm font-semibold text-indigo-600 hover:text-indigo-500 transition duration-300">
+              <a
+                href="/forgotpassword"
+                className="text-sm font-semibold text-indigo-600 hover:text-indigo-500 transition duration-300"
+              >
                 Forgot password?
               </a>
             </div>
@@ -134,13 +130,6 @@ export default function LoginPage() {
             {loading ? "Signing in..." : "Sign in"}
           </button>
         </form>
-
-        <p className="mt-6 text-center text-sm text-gray-500">
-          Don't have an account?{" "}
-          <a href="/signup" className="font-semibold text-indigo-600 hover:text-indigo-500 transition duration-300">
-            Sign-up here
-          </a>
-        </p>
       </div>
     </div>
   );

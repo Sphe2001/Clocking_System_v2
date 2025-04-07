@@ -31,7 +31,9 @@ const Sidebar = ({ setProfileModalState }) => {
 
   const handleLogout = () => {
     if (window.confirm("Are you sure you want to log out?")) {
-      navigate("/adminlogin");
+      // Clear any authentication tokens or session data if necessary
+      localStorage.removeItem("authToken"); // Assuming you store a token for the session
+      navigate("/dashboard/admin/login"); // Navigate to the admin login page
     }
   };
 

@@ -20,6 +20,7 @@ import ViewAttendance from './pages/supervisor/viewAttendance/viewAttendance.jsx
 import ForgotPasswordPage from './pages/auth/forgotpassword.jsx';
 import VerifyResetPasswordOTPPage from './pages/auth/verifyResetPasswordOTP.jsx';
 import ResetPasswordPage from './pages/auth/ResetPassword.jsx';
+import LoginAdmin from './pages/auth/adminLogin.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -38,6 +39,7 @@ createRoot(document.getElementById('root')).render(
           <Route path="/dashboard/admin/reports" element={<AdminReports />} />
           <Route path="/dashboard/admin" element={<AdminDashboard />} />
           <Route path="/dashboard/admin/users" element={<AdminUsers />} />
+          <Route path='/dashboard/admin/login' element={< LoginAdmin/>}/>
           <Route path="/dashboard/student" element={<StudentDashboard />} />
           <Route path="/dashboard/student/viewProfile" element={<ViewProfile />} />
           <Route path="/dashboard/supervisor" element={<SupervisorDashboard />} />
