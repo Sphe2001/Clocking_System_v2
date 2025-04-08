@@ -74,6 +74,7 @@ const Sidebar = ({ setProfileModalState }) => {
           { path: "/dashboard/admin", label: "🏠 Dashboard" },
           { path: "/dashboard/admin/users", label: "👥 Users" },
           { path: "/dashboard/admin/reports", label: "📊 Reports" },
+          { path: "/dashboard/admin/profile", label: " profile" },
         ].map(({ path, label }) => (
           <div
             key={path}
@@ -85,13 +86,6 @@ const Sidebar = ({ setProfileModalState }) => {
             {label}
           </div>
         ))}
-
-        <button
-          className="w-full cursor-pointer p-3 bg-transparent hover:bg-blue-600 text-blue-600 hover:text-white rounded transition-colors duration-300 mt-4"
-          onClick={handleProfileModalToggle}
-        >
-          👤 Profile
-        </button>
       </nav>
 
       <button
@@ -100,73 +94,6 @@ const Sidebar = ({ setProfileModalState }) => {
       >
         🚪 Logout
       </button>
-
-      {isProfileOpen && (
-        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50">
-          <div className="bg-white p-8 rounded-lg w-96 shadow-lg">
-            <h2 className="text-3xl font-semibold text-gray-800 mb-4 text-center">
-              Admin Profile
-            </h2>
-
-            <div className="flex justify-center mb-4">
-              <label className="relative w-32 h-32 cursor-pointer">
-                <img
-                  src={profilePic}
-                  alt="Profile"
-                  className="w-full h-full object-cover rounded-full border-4 border-blue-600 shadow-lg"
-                />
-                <input
-                  type="file"
-                  accept="image/*"
-                  className="absolute inset-0 opacity-0"
-                  onChange={handleProfileChange}
-                />
-              </label>
-            </div>
-            <p className="text-gray-600 text-sm text-center">
-              Click to change profile picture
-            </p>
-
-            <div className="mt-6 bg-gray-200 p-6 rounded-lg shadow-lg">
-              <p className="text-xl font-semibold text-black text-center">
-                {username}
-              </p>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full p-2 mt-2 border border-gray-300 rounded-lg text-black"
-                placeholder="Edit Email"
-                disabled={!canEdit} // Disable input when not in edit mode
-              />
-            </div>
-
-            <div className="flex justify-between mt-6">
-              {canEdit ? (
-                <button
-                  className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
-                  onClick={handleSaveClick}
-                >
-                  💾 Save
-                </button>
-              ) : (
-                <button
-                  className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
-                  onClick={handleEditClick}
-                >
-                  🖊 Edit Email
-                </button>
-              )}
-              <button
-                className="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600 transition"
-                onClick={handleProfileModalToggle}
-              >
-                ✖ Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </aside>
   );
 };
