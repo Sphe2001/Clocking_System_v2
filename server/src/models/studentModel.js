@@ -44,6 +44,10 @@ const Student = sequelize.define("Student", {
     type: DataTypes.BOOLEAN,
     default: false,
   },
+  isPasswordSet: {
+    type: DataTypes.BOOLEAN,
+    default: false,
+  },
 });
 
 module.exports = Student;

@@ -36,12 +36,12 @@ router.post("/login", async (req, res) => {
       return res.status(404).json({ message: "User does not exist" });
     }
 
-    if (!user.isVerified) {
-      return res.status(400).json({
-        message: "Account not verified. Please verify your email.",
-        redirectUrl: "/verifyemail",
-      });
-    }
+    // if (!user.isVerified) {
+    //   return res.status(400).json({
+    //     message: "Account not verified. Please verify your email.",
+    //     redirectUrl: "/verifyemail",
+    //   });
+    // }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {

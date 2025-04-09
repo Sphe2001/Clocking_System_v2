@@ -44,6 +44,10 @@ const Supervisor = sequelize.define("Supervisor", {
     type: DataTypes.BOOLEAN,
     default: false,
   },
+  isPasswordSet: {
+    type: DataTypes.BOOLEAN,
+    default: false,
+  },
 });
 
 module.exports = Supervisor;

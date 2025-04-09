@@ -2,8 +2,8 @@ const express = require("express");
 const dotenv = require("dotenv");
 const sequelize = require("./src/helpers/dbConfig");
 const authRoutes = require("./src/routes/auth/authRoutes");
-const studentRoutes = require("./src/routes/student/studentRoutes");
-const supervisorRoutes = require("./src/routes/supervisor/supervisorRoutes")
+//const studentRoutes = require("./src/routes/student/studentRoutes");
+//const supervisorRoutes = require("./src/routes/supervisor/supervisorRoutes")
 const adminRoutes = require("./src/routes/admin/adminRoutes");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
@@ -26,8 +26,8 @@ app.use(cookieParser());
 
 // Routes
 app.use("/api/auth", authRoutes);
-app.use("/api/student", studentRoutes);
-app.use("/api/supervisor", supervisorRoutes);
+// app.use("/api/student", studentRoutes);
+// app.use("/api/supervisor", supervisorRoutes);
 app.use("/api/admin", adminRoutes);
 
 
