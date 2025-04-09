@@ -1,19 +1,19 @@
 const express = require("express");
-const { Supervisor } = require("../../models");
-const getUserId = require("../../helpers/getUserId");
+const { Student } = require("../../../models");
+const getUserId = require("../../../helpers/getUserId");
 const cookieParser = require("cookie-parser");
 
 const router = express.Router();
 router.use(cookieParser());
 
-router.post("/profile/supervisor", async (req, res) => {
+router.post("/profile/student", async (req, res) => {
   try {
-    const staffNo = getUserId(req);
+    const studentNo = getUserId(req);
 
-    const user = await Supervisor.findOne({ where: { staffNo } });
+    const user = await Student.findOne({ where: { studentNo } });
 
-    const supervisor = {
-      staffNo: user.staffNo,
+    const student = {
+        studentNo: user.studentNo,
       email: user.email,
       surname: user.surname,
       initials: user.initials,
@@ -22,7 +22,7 @@ router.post("/profile/supervisor", async (req, res) => {
     };
 
     res.status(200).json({
-      supervisor,
+      student,
     });
   } catch (error) {
     console.error("Error fetching profile:", error.message);

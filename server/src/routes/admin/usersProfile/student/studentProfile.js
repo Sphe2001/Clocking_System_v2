@@ -1,14 +1,13 @@
 const express = require("express");
-const { Student } = require("../../models");
-const getUserId = require("../../helpers/getUserId");
+const { Student } = require("../../../../models");
 const cookieParser = require("cookie-parser");
 
 const router = express.Router();
 router.use(cookieParser());
 
-router.post("/profile/student", async (req, res) => {
+router.post("/view/studentProfile", async (req, res) => {
   try {
-    const studentNo = getUserId(req);
+    const {studentNo} = req.body
 
     const user = await Student.findOne({ where: { studentNo } });
 
