@@ -1,24 +1,49 @@
 const express = require("express");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
-const { studentRequestModel } = require ("../../../models");
+const { Op } = require("sequelize");
+const { studentRequest } = require("../../../models");
+const getUserId = require("../../../helpers/getUserId");
 
 dotenv.config();
 const router = express.Router();
 router.use(cookieParser());
 
-router.get('/student/leave-requests/:studentId', async (req, res) => {
-    try {
-      const { studentId } = req.params;
-      const requests = await studentRequestModel.findAll({
-        where: { studentNo: studentId },
-        order: [['createdAt', 'DESC']],
-      });
-      res.status(200).json(requests);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
+// GET all today's request statuses for a student
+router.get("/viewrequest/status", async (req, res) => {
+  try {
+    const studentNo = getUserId(req);
+
+    if (!studentNo) {
+      return res.status(400).json({ message: "Invalid or missing studentNo" });
     }
-  });
- module.exports = router;  
+
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+
+    const endOfDay = new Date();
+    endOfDay.setHours(23, 59, 59, 999);
+
+    const requests = await studentRequest.findAll({
+      where: {
+        studentNo,
+        createdAt: {
+          [Op.between]: [startOfDay, endOfDay],
+        },
+      },
+      attributes: ["reason", "isApproved", "isViewed", "createdAt"], // optional: return only needed fields
+      order: [["createdAt", "DESC"]], // optional: most recent first
+    });
+
+    if (!requests || requests.length === 0) {
+      return res.status(404).json({ message: "No requests found for today" });
+    }
+
+    res.status(200).json(requests);
+  } catch (error) {
+    console.error("Error fetching request statuses:", error.message);
+    res.status(500).json({ message: "Internal server error", error: error.message });
+  }
+});
+
+module.exports = router;

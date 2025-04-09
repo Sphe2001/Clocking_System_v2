@@ -3,6 +3,7 @@ const Admin = require("./adminModel");
 const Student = require("./studentModel");
 const Supervisor = require("./supervisorModel");
 const StudentAttendance = require("./studentAttendance");
+const studentRequest = require("./studentRequestModel")
 const SupervisorAttendance = require("./supervisorAttendance");
 const UserOTPVerification = require("./userOTPVerification");
 const PasswordResetOTP = require("./passwordResetOTP");
@@ -24,4 +25,5 @@ module.exports = {
   SupervisorAttendance,
   UserOTPVerification,
   PasswordResetOTP,
+  studentRequest,
 };

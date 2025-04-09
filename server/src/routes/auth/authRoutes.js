@@ -8,6 +8,7 @@ const registerSupervisor = require("./registerSupervisor");
 const requestPasswordReset = require("./requestPasswordReset");
 const verifyPasswordResetOTP = require("./verifyPasswordResetOTP");
 const resetPassword = require("./resetPassword");
+const setPassword = require("./setPassword");
 
 const router = express.Router();
 
@@ -19,5 +20,6 @@ router.use(registerSupervisor);
 router.use(requestPasswordReset);
 router.use(verifyPasswordResetOTP);
 router.use(resetPassword);
+router.use(setPassword);
 
 module.exports = router;

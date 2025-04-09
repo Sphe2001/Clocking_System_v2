@@ -84,10 +84,12 @@ router.post("/register/student", async (req, res) => {
     const password = `${Math.floor(10000 + Math.random() * 9000)}`;
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    const email = `${studentNo}@tut4life.ac.za`
+
     // Create a new student
     const student = await Student.create({
       studentNo,
-      email : studentNo + "@tut4life.ac.za",
+      email : email,
       role: "student",
       surname,
       initials,

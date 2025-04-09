@@ -12,6 +12,7 @@ router.use(cookieParser());
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
+    let redirectUrl = "/";
 
     if (!email || !password) {
       return res
@@ -43,6 +44,8 @@ router.post("/login", async (req, res) => {
     //   });
     // }
 
+    
+
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(401).json({ message: "Invalid email or password" });
@@ -67,7 +70,15 @@ router.post("/login", async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000,
     });
 
-    let redirectUrl = "/";
+    if(!user.isPasswordSet){
+      redirectUrl = "/setPassword"
+      return res.json({
+        message: "Please set the password",
+        redirectUrl,
+      })
+    }
+
+    
     if (role === "student") redirectUrl = "/dashboard/student";
     else if (role === "supervisor") redirectUrl = "/dashboard/supervisor";
     else if (role === "admin") redirectUrl = "/dashboard/admin";
