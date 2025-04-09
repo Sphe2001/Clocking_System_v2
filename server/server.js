@@ -2,22 +2,12 @@ const express = require("express");
 const dotenv = require("dotenv");
 const sequelize = require("./src/helpers/dbConfig");
 const authRoutes = require("./src/routes/auth/authRoutes");
-const clockin = require("./src/routes/student/clock_in");
-const earlyLeave = require("./src/routes/student/studentRequest/earlyLeave");
-const clockout = require("./src/routes/student/clock_out");
-const getHoursWorked = require("./src/routes/student/getHourWorked");
-const fecthUsers = require("./src/routes/admin/fetchUsers/fetch");
-const fetchAttendance = require("./src/routes/admin/fetchAttendance/fetch");
-const weekRecords = require("./src/routes/admin/weekReports/weekRecords");
-// const checkRequestStatus = require("./src/routes/student/studentRequest/checkRequestStatus");
-// const approveRequest = require("./src/routes/supervisor/reviewReq/approveRequest");
-// const requestReview = require("./src/routes/supervisor/reviewReq/requestReview");
+const studentRoutes = require("./src/routes/student/studentRoutes");
+const supervisorRoutes = require("./src/routes/supervisor/supervisorRoutes")
 const adminRoutes = require("./src/routes/admin/adminRoutes");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 
-const supervisorClockInRoute = require("./src/routes/supervisor/clock_in");
-const supervisorClockOutRoute = require("./src/routes/supervisor/clock_out");
 
 const app = express();
 
@@ -36,21 +26,10 @@ app.use(cookieParser());
 
 // Routes
 app.use("/api/auth", authRoutes);
-app.use("/api/student", clockin);
-app.use("/api/student", clockout);
-app.use("/api", getHoursWorked);
-app.use("/api", earlyLeave);
+app.use("/api/student", studentRoutes);
+app.use("/api/supervisor", supervisorRoutes);
+app.use("/api/admin", adminRoutes);
 
-app.use("/api", fecthUsers);
-app.use("/api", fetchAttendance);
-app.use("/api", weekRecords);
-app.use("/api", adminRoutes);
-
-app.use("/api/supervisor", supervisorClockInRoute);
-app.use("/api/supervisor", supervisorClockOutRoute);
-// app.use("/api", checkRequestStatus);
-// app.use("/api", approveRequest);
-// app.use("/api", requestReview);
 
 // Test database connection
 sequelize

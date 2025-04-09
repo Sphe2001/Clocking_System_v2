@@ -1,9 +1,9 @@
 const express = require("express");
 const { Op } = require("sequelize");
-const StudentAttendance = require("../../models/studentAttendance");
+const StudentAttendance = require("../../../models/studentAttendance");
 const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
-const getDataFromToken = require("../../helpers/getUserId");
+const getDataFromToken = require("../../../helpers/getUserId");
 
 const router = express.Router();
 dotenv.config();
@@ -16,8 +16,8 @@ const formatTime = (date) => {
   return `${hours}:${minutes}`;
 };
 
-// POST /clock-in route
-router.post("/clock-in", async (req, res) => {
+// POST /clock-out route
+router.post("/clock-out", async (req, res) => {
   try {
     // Extract userId from token
     const userId = getDataFromToken(req);
@@ -30,34 +30,37 @@ router.post("/clock-in", async (req, res) => {
     const currentDate = new Date();
     const formattedTime = formatTime(currentDate); // Format current time to 'hh:mm'
 
-    // Check if the student has already clocked in today
-    const existingClockIn = await StudentAttendance.findOne({
+    // Find the student's attendance record where they have clocked in but not yet clocked out
+    const attendanceRecord = await StudentAttendance.findOne({
       where: {
         studentNo: userId,
         clock_in: {
-          [Op.gte]: new Date(`${currentDate.toISOString().split('T')[0]}T00:00:00Z`), // start of the day
-          [Op.lt]: new Date(`${currentDate.toISOString().split('T')[0]}T23:59:59Z`), // end of the day
+          [Op.ne]: null, // Ensure the student has clocked in
+        },
+        clock_out: {
+          [Op.eq]: null, // Ensure the student hasn't clocked out yet
         },
       },
     });
 
-     if (existingClockIn) {
-      return res.status(400).json({ error: "You have already clocked in today" });
-     }
+    if (!attendanceRecord) {
+      return res.status(400).json({ error: "You have not clocked in yet or already clocked out today" });
+    }
 
-    // Create a new attendance record (clock-in)
-    const attendanceRecord = await StudentAttendance.create({
-      studentNo: userId,
-      clock_in: currentDate, // Set the full timestamp for clock-in
-    });
+    // Update the existing attendance record with the clock-out time (in 'hh:mm' format)
+    attendanceRecord.clock_out = currentDate; // Set the full timestamp for clock-out
 
+    // Save the updated record
+    await attendanceRecord.save();
+
+    // Return the success message with clock-out time in 'hh:mm' format
     return res.json({
-      message: "Clock-in successful",
+      message: "Clock-out successful",
       success: true,
-      time: formattedTime, // Return only the time part in the response
+      clock_out: formattedTime, // Return the clock-out time in the response
     });
   } catch (error) {
-    console.error("Error in clock-in:", error);
+    console.error("Error in clock-out:", error);
 
     if (error.name === "SequelizeValidationError") {
       return res.status(400).json({

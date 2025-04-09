@@ -1,9 +1,9 @@
 const express = require("express");
 const { Op } = require("sequelize");
-const SupervisorAttendance = require("../../models/supervisorAttendance"); // Assuming you have this model for supervisor attendance
+const SupervisorAttendance = require("../../../models/supervisorAttendance"); // Assuming you have this model for supervisor attendance
 const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
-const getDataFromToken = require("../../helpers/getUserId"); // Helper function to get supervisor ID from token
+const getDataFromToken = require("../../../helpers/getUserId"); // Helper function to get supervisor ID from token
 
 const router = express.Router();
 dotenv.config();
