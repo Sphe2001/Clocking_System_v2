@@ -9,6 +9,7 @@ const requestPasswordReset = require("./requestPasswordReset");
 const verifyPasswordResetOTP = require("./verifyPasswordResetOTP");
 const resetPassword = require("./resetPassword");
 const setPassword = require("./setPassword");
+const setContact = require("./setContact");
 
 const router = express.Router();
 
@@ -21,5 +22,6 @@ router.use(requestPasswordReset);
 router.use(verifyPasswordResetOTP);
 router.use(resetPassword);
 router.use(setPassword);
+router.use(setContact);
 
 module.exports = router;
