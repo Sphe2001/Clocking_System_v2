@@ -19,7 +19,6 @@ const formatTime = (date) => {
 // POST /clock-out route
 router.post("/clock-out", async (req, res) => {
   try {
-    // Extract userId from token
     const userId = getDataFromToken(req);
     console.log(userId);
 
@@ -28,18 +27,25 @@ router.post("/clock-out", async (req, res) => {
     }
 
     const currentDate = new Date();
-    const formattedTime = formatTime(currentDate); // Format current time to 'hh:mm'
+    const formattedTime = formatTime(currentDate);
 
-    // Find the student's attendance record where they have clocked in but not yet clocked out
+    // Enforce minimum clock-out time: 15:50
+    const minClockOutHour = 15;
+    const minClockOutMinute = 50;
+
+    if (
+      currentDate.getHours() < minClockOutHour ||
+      (currentDate.getHours() === minClockOutHour && currentDate.getMinutes() < minClockOutMinute)
+    ) {
+      return res.status(400).json({ error: "You cannot clock out before 15:50" });
+    }
+
+    // Find attendance record with clock_in but no clock_out
     const attendanceRecord = await StudentAttendance.findOne({
       where: {
         studentNo: userId,
-        clock_in: {
-          [Op.ne]: null, // Ensure the student has clocked in
-        },
-        clock_out: {
-          [Op.eq]: null, // Ensure the student hasn't clocked out yet
-        },
+        clock_in: { [Op.ne]: null },
+        clock_out: { [Op.eq]: null },
       },
     });
 
@@ -47,17 +53,13 @@ router.post("/clock-out", async (req, res) => {
       return res.status(400).json({ error: "You have not clocked in yet or already clocked out today" });
     }
 
-    // Update the existing attendance record with the clock-out time (in 'hh:mm' format)
-    attendanceRecord.clock_out = currentDate; // Set the full timestamp for clock-out
-
-    // Save the updated record
+    attendanceRecord.clock_out = currentDate;
     await attendanceRecord.save();
 
-    // Return the success message with clock-out time in 'hh:mm' format
     return res.json({
       message: "Clock-out successful",
       success: true,
-      clock_out: formattedTime, // Return the clock-out time in the response
+      clock_out: formattedTime,
     });
   } catch (error) {
     console.error("Error in clock-out:", error);

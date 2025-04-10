@@ -1,6 +1,7 @@
 const express = require("express");
 const { Op } = require("sequelize");
 const StudentAttendance = require("../../../models/studentAttendance");
+const studentRequest = require("../../../models/studentRequestModel");
 const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
 const getDataFromToken = require("../../../helpers/getUserId");
@@ -21,6 +22,7 @@ router.post("/clock-in", async (req, res) => {
   try {
     // Extract userId from token
     const userId = getDataFromToken(req);
+    const studentNo = userId;
     console.log(userId);
 
     if (!userId) {
@@ -28,33 +30,47 @@ router.post("/clock-in", async (req, res) => {
     }
 
     const currentDate = new Date();
-    const formattedTime = formatTime(currentDate); // Format current time to 'hh:mm'
+    const formattedTime = formatTime(currentDate);
 
-    // Check if the student has already clocked in today
+    // Get the latest clock-in record for today
     const existingClockIn = await StudentAttendance.findOne({
       where: {
         studentNo: userId,
         clock_in: {
-          [Op.gte]: new Date(`${currentDate.toISOString().split('T')[0]}T00:00:00Z`), // start of the day
-          [Op.lt]: new Date(`${currentDate.toISOString().split('T')[0]}T23:59:59Z`), // end of the day
+          [Op.gte]: new Date(`${currentDate.toISOString().split('T')[0]}T00:00:00Z`),
+          [Op.lt]: new Date(`${currentDate.toISOString().split('T')[0]}T23:59:59Z`),
         },
       },
+      order: [['clock_in', 'DESC']],
     });
 
-     if (existingClockIn) {
-      return res.status(400).json({ error: "You have already clocked in today" });
-     }
+    // Get the latest student request
+    const requestRecord = await studentRequest.findOne({
+      where: { studentNo },
+      order: [['createdAt', 'DESC']],
+    });
 
-    // Create a new attendance record (clock-in)
+    let isApproved = requestRecord?.isApproved ?? false;
+
+    if (existingClockIn && !isApproved) {
+      return res.status(400).json({ error: "You have already clocked in today" });
+    }
+
+    // Create a new attendance record
     const attendanceRecord = await StudentAttendance.create({
       studentNo: userId,
-      clock_in: currentDate, // Set the full timestamp for clock-in
+      clock_in: currentDate,
     });
+
+    // Update the latest request's approval
+    if (requestRecord) {
+      await requestRecord.update({ isApproved: false });
+    }
 
     return res.json({
       message: "Clock-in successful",
       success: true,
-      time: formattedTime, // Return only the time part in the response
+      time: formattedTime,
     });
   } catch (error) {
     console.error("Error in clock-in:", error);

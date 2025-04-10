@@ -37,6 +37,10 @@ const Admin = sequelize.define("Admin", {
     type: DataTypes.BOOLEAN,
     default: false,
   },
+  isPasswordSet: {
+    type: DataTypes.BOOLEAN,
+    default: true,
+  },
 });
 
 module.exports = Admin;

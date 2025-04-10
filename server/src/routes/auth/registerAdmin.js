@@ -71,6 +71,7 @@ router.post("/register/admin", async (req, res) => {
       password: hashedPassword,
       isVerified: true,
       isPasswordResetVerified: false,
+      isPasswordSet: true,
     });
 
     res.status(201).json({ message: "Admin registered successfully", admin });
@@ -81,3 +82,5 @@ router.post("/register/admin", async (req, res) => {
 });
 
 module.exports = router;
+
+
