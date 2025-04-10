@@ -1,6 +1,7 @@
 const express = require("express");
 const { Op } = require("sequelize");
 const StudentAttendance = require("../../../models/studentAttendance");
+const { studentRequest } = require("../../../models");
 const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
 const getDataFromToken = require("../../../helpers/getUserId");
@@ -9,18 +10,17 @@ const router = express.Router();
 dotenv.config();
 router.use(cookieParser());
 
-// Helper function to get the current time in 'hh:mm' format
+// Format current time
 const formatTime = (date) => {
   const hours = String(date.getHours()).padStart(2, '0');
   const minutes = String(date.getMinutes()).padStart(2, '0');
   return `${hours}:${minutes}`;
 };
 
-// POST /clock-out route
 router.post("/clock-out", async (req, res) => {
   try {
     const userId = getDataFromToken(req);
-    console.log(userId);
+    const studentNo = userId;
 
     if (!userId) {
       return res.status(400).json({ error: "User not found" });
@@ -28,19 +28,33 @@ router.post("/clock-out", async (req, res) => {
 
     const currentDate = new Date();
     const formattedTime = formatTime(currentDate);
+    const currentHour = currentDate.getHours();
+    const currentMinute = currentDate.getMinutes();
 
-    // Enforce minimum clock-out time: 15:50
-    const minClockOutHour = 15;
-    const minClockOutMinute = 50;
+    // Define minimum clock-out time: 15:50
+    const minHour = 15;
+    const minMinute = 50;
 
-    if (
-      currentDate.getHours() < minClockOutHour ||
-      (currentDate.getHours() === minClockOutHour && currentDate.getMinutes() < minClockOutMinute)
-    ) {
-      return res.status(400).json({ error: "You cannot clock out before 15:50" });
+    // Check if it's before 15:50
+    const isBeforeMinTime =
+      currentHour < minHour || (currentHour === minHour && currentMinute < minMinute);
+
+    // If before 15:50, require approved request
+    if (isBeforeMinTime) {
+      const requestRecord = await studentRequest.findOne({
+        where: { studentNo },
+        order: [['createdAt', 'DESC']],
+      });
+
+      if (!requestRecord || requestRecord.isApproved !== true) {
+        return res.status(403).json({
+          error: "You are not allowed to clock out before 15:50 unless your request is approved.",
+          status: "NOT_APPROVED",
+        });
+      }
     }
 
-    // Find attendance record with clock_in but no clock_out
+    // Check attendance record
     const attendanceRecord = await StudentAttendance.findOne({
       where: {
         studentNo: userId,
@@ -50,7 +64,9 @@ router.post("/clock-out", async (req, res) => {
     });
 
     if (!attendanceRecord) {
-      return res.status(400).json({ error: "You have not clocked in yet or already clocked out today" });
+      return res.status(400).json({
+        error: "You have not clocked in yet or have already clocked out today",
+      });
     }
 
     attendanceRecord.clock_out = currentDate;
@@ -61,6 +77,7 @@ router.post("/clock-out", async (req, res) => {
       success: true,
       clock_out: formattedTime,
     });
+
   } catch (error) {
     console.error("Error in clock-out:", error);
 
