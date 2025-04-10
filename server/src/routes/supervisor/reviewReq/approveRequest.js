@@ -1,4 +1,4 @@
-const router = require("../../auth/login");
+
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const {studentRequest} = require("../../../models");
