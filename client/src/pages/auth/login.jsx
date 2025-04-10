@@ -50,7 +50,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-yellow-200 via-yellow-300 to-yellow-500">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-yellow-200 via-red-300 to-blue-500">
       <Toaster /> 
       <div className="w-full max-w-md p-8 bg-white shadow-lg rounded-lg sm:max-w-lg md:max-w-xl">
         <div className="flex flex-col items-center">
@@ -111,13 +111,6 @@ export default function LoginPage() {
             {loading ? "Signing in..." : "Sign in"}
           </button>
         </form>
-
-        <p className="mt-6 text-center text-sm text-gray-500">
-          Don't have an account?{" "}
-          <a href="/signup" className="font-semibold text-indigo-600 hover:text-indigo-500 transition duration-300">
-            Sign-up here
-          </a>
-        </p>
       </div>
     </div>
   );

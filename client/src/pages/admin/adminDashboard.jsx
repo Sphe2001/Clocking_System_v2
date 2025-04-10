@@ -1,92 +1,54 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Sidebar from "../../components/adminNavbar";
+import axios from "axios";
 
 function AdminDashboard() {
-  const [filter, setFilter] = useState("All");
-  const [users, setUsers] = useState([]);
+  const domain = import.meta.env.VITE_REACT_APP_DOMAIN;
+
+  const [attendanceData, setAttendanceData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [studentCount, setStudentCount] = useState(0);
-  const [supervisorCount, setSupervisorCount] = useState(0);
+  const [filter, setFilter] = useState("All");
+
+  const getStatus = (clockIn) => {
+    if (!clockIn) return { icon: "❌", tooltip: "Absent" };
+    const hour = new Date(clockIn).getHours();
+    return hour <= 8
+      ? { icon: "✅", tooltip: "On Time" }
+      : { icon: "🕒", tooltip: "Late" };
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchTodayAttendance = async () => {
       try {
-        const studentsResponse = await fetch("http://localhost:3001/api/admin/fetchAllStudentUsers/users");
-        const supervisorsResponse = await fetch("http://localhost:3001/api/admin/fetchAllSupervisorUsers/supervisorUsers");
+        const res = await axios.get(`${domain}/api/admin/todays/attendance`);
 
-        const studentsData = await studentsResponse.json();
-        const supervisorsData = await supervisorsResponse.json();
-
-        const formattedStudents = studentsData.map(student => ({
-          studentNo: student.studentNo,
-          surname: student.surname,
+        const students = res.data.students.map((user) => ({
+          ...user,
           role: "Student",
-          clockIn: student.clock_in_time || "N/A",
-          clockOut: student.clock_out_time || "N/A"
         }));
 
-        const formattedSupervisors = supervisorsData.map(supervisor => ({
-          staffNo: supervisor.staffNo,
-          surname: supervisor.surname,
+        const supervisors = res.data.supervisors.map((user) => ({
+          ...user,
           role: "Supervisor",
-          clockIn: supervisor.clock_in_time || "N/A",
-          clockOut: supervisor.clock_out_time || "N/A"
         }));
 
-        // Combine both student and supervisor data
-        const allUsers = [...formattedStudents, ...formattedSupervisors];
-
-        // Sort users by clockIn time (latest clock-in first)
-        allUsers.sort((a, b) => {
-          const clockInA = a.clockIn === "N/A" ? null : new Date(a.clockIn);
-          const clockInB = b.clockIn === "N/A" ? null : new Date(b.clockIn);
-          
-          // If clockIn time is missing (N/A), place that entry at the bottom
-          if (!clockInA && !clockInB) return 0;
-          if (!clockInA) return 1;
-          if (!clockInB) return -1;
-
-          return clockInB - clockInA; // Sort in descending order (latest first)
-        });
-
-        // Update the state with users and counts
-        setUsers(allUsers.slice(0, 10)); // Limit to 10 records
-        setStudentCount(formattedStudents.length); // Total students
-        setSupervisorCount(formattedSupervisors.length); // Total supervisors
+        const combined = [...students, ...supervisors];
+        setAttendanceData(combined);
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Failed to fetch today's attendance:", error);
         setLoading(false);
       }
     };
 
-    fetchData();
-  }, []);
+    fetchTodayAttendance();
+  }, [domain]);
 
-  const filteredData = filter === "All" ? users : users.filter(user => user.role === filter);
-
-  // Function to get current date
-  const getCurrentDate = () => {
-    const today = new Date();
-    return today.toLocaleDateString(); // Formats as MM/DD/YYYY or similar
-  };
-
-  // Function to determine status and return icon and tooltip
-  const getStatus = (clockIn) => {
-    if (clockIn === "N/A") {
-      return { status: "Absent", icon: "❌", tooltip: "User is absent" };
-    }
-
-    const clockInTime = new Date(`1970-01-01T${clockIn}:00Z`); // Convert clockIn to Date object
-    const comparisonTime = new Date("1970-01-01T08:10:00Z"); // 08:10 AM in UTC
-
-    if (clockInTime > comparisonTime) {
-      return { status: "Late", icon: "⏰", tooltip: "User is late" };
-    } else {
-      return { status: "On Time", icon: "✅", tooltip: "User is on time" };
-    }
-  };
+  const filteredData = attendanceData.filter((user) => {
+    if (filter === "All") return true;
+    return user.role === filter;
+  });
 
   return (
     <div className="flex min-h-screen bg-gray-50">
@@ -107,15 +69,13 @@ function AdminDashboard() {
           Admin Panel
         </motion.h1>
 
-        {/* Stats Section */}
-        <div className="mb-4 flex justify-between w-full">
-          <p>Total Students: {studentCount}</p>
-          <p>Total Supervisors: {supervisorCount}</p>
-        </div>
-
         <div className="mb-4">
           <label className="font-semibold mr-2">Filter by role:</label>
-          <select value={filter} onChange={(e) => setFilter(e.target.value)} className="border p-2 rounded">
+          <select
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            className="border p-2 rounded"
+          >
             <option value="All">All</option>
             <option value="Student">Students</option>
             <option value="Supervisor">Supervisors</option>
@@ -156,12 +116,11 @@ function AdminDashboard() {
                   <th className="p-6 border-b">Clock In</th>
                   <th className="p-6 border-b">Clock Out</th>
                   <th className="p-6 border-b">Status</th>
-                  <th className="p-6 border-b">Date</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredData.map((user, index) => {
-                  const statusData = getStatus(user.clockIn);
+                  const statusData = getStatus(user.clock_in);
                   return (
                     <motion.tr
                       key={index}
@@ -170,11 +129,13 @@ function AdminDashboard() {
                       animate={{ y: 0, opacity: 1 }}
                       transition={{ duration: 0.9, delay: index * 0.1 }}
                     >
-                      <td className="p-6 border-b text-center">{user.role === "Student" ? user.studentNo : user.staffNo}</td>
+                      <td className="p-6 border-b text-center">
+                        {user.studentNo || user.staffNo || "N/A"}
+                      </td>
                       <td className="p-6 border-b text-center">{user.surname}</td>
                       <td className="p-6 border-b text-center">{user.role}</td>
-                      <td className="p-6 border-b text-center">{user.clockIn}</td>
-                      <td className="p-6 border-b text-center">{user.clockOut}</td>
+                      <td className="p-6 border-b text-center">{user.clock_in}</td>
+                      <td className="p-6 border-b text-center">{user.clock_out}</td>
                       <td className="p-6 border-b text-center">
                         <div className="relative group">
                           <span className="text-xl">{statusData.icon}</span>
@@ -183,7 +144,6 @@ function AdminDashboard() {
                           </div>
                         </div>
                       </td>
-                      <td className="p-6 border-b text-center">{getCurrentDate()}</td>
                     </motion.tr>
                   );
                 })}
