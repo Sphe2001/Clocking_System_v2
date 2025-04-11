@@ -1,38 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
-const Sidebar = ({ setProfileModalState }) => {
+const Sidebar = () => {
   const domain = import.meta.env.VITE_REACT_APP_DOMAIN;
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [profilePic, setProfilePic] = useState(
-    localStorage.getItem("profilePic") || "/default-avatar.png"
-  );
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const [username] = useState("Admin User");
-  const [email, setEmail] = useState("admin2@tut.ac.za");
-  const [canEdit, setCanEdit] = useState(false); // State to control email editing
-
-  const handleProfileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfilePic(reader.result);
-        localStorage.setItem("profilePic", reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleProfileModalToggle = () => {
-    const newState = !isProfileOpen;
-    setIsProfileOpen(newState);
-    if (setProfileModalState) setProfileModalState(newState);
-  };
 
   const handleLogout = async () => {
     try {
@@ -44,7 +19,7 @@ const Sidebar = ({ setProfileModalState }) => {
       });
 
       toast.success(response.data?.message || "Logged out successfully");
-      navigate(response.data?.redirectUrl || "/login"); // fallback to login if redirectUrl is missing
+      navigate(response.data?.redirectUrl || "/login");
     } catch (error) {
       console.error(error);
       const errorMessage =
@@ -56,36 +31,76 @@ const Sidebar = ({ setProfileModalState }) => {
     }
   };
 
-  const handleEditClick = () => {
-    setCanEdit(true); // Allow email field to be editable
-  };
-
-  const handleSaveClick = () => {
-    alert("Email updated successfully!");
-    setCanEdit(false); // Disable email editing after saving
-  };
-
   return (
     <aside className="w-64 bg-blue-800 text-white h-screen p-6 fixed left-0 top-0 flex flex-col">
       <h1 className="text-2xl font-bold text-center mb-6">ADMIN PANEL</h1>
 
       <nav className="flex-grow">
-        {[
-          { path: "/dashboard/admin", label: "🏠 Dashboard" },
-          { path: "/dashboard/admin/users", label: "👥 Users" },
-          { path: "/dashboard/admin/reports", label: "📊 Reports" },
-          { path: "/dashboard/admin/profile", label: " profile" },
-        ].map(({ path, label }) => (
-          <div
-            key={path}
-            className={`p-3 cursor-pointer rounded transition-colors duration-300 ${
-              location.pathname === path ? "bg-blue-700" : "hover:bg-blue-600"
-            }`}
-            onClick={() => navigate(path)}
-          >
-            {label}
-          </div>
-        ))}
+        {/* Dashboard */}
+        <div
+          className={`p-3 cursor-pointer rounded transition-colors duration-300 ${
+            location.pathname === "/dashboard/admin" ? "bg-blue-700" : "hover:bg-blue-600"
+          }`}
+          onClick={() => navigate("/dashboard/admin")}
+        >
+          🏠 Dashboard
+        </div>
+
+        {/* Users */}
+        <div
+          className={`p-3 cursor-pointer rounded transition-colors duration-300 ${
+            location.pathname.startsWith("/dashboard/admin/users")
+              ? "bg-blue-700"
+              : "hover:bg-blue-600"
+          }`}
+        >
+          👥 Users
+        </div>
+        <div
+          className="ml-4 p-2 text-sm cursor-pointer hover:bg-blue-600 rounded"
+          onClick={() => navigate("/dashboard/admin/users/studentspage")}
+        >
+          • Students
+        </div>
+        <div
+          className="ml-4 p-2 text-sm cursor-pointer hover:bg-blue-600 rounded"
+          onClick={() => navigate("/dashboard/admin/users/supervisorspage")}
+        >
+          • Supervisors
+        </div>
+
+        {/* Reports */}
+        <div
+          className={`p-3 cursor-pointer rounded transition-colors duration-300 ${
+            location.pathname.startsWith("/dashboard/admin/reports")
+              ? "bg-blue-700"
+              : "hover:bg-blue-600"
+          }`}
+        >
+          📊 Reports
+        </div>
+        <div
+          className="ml-4 p-2 text-sm cursor-pointer hover:bg-blue-600 rounded"
+          onClick={() => navigate("/dashboard/admin/reports/studentreportspage")}
+        >
+          • Students
+        </div>
+        <div
+          className="ml-4 p-2 text-sm cursor-pointer hover:bg-blue-600 rounded"
+          onClick={() => navigate("/dashboard/admin/reports/supervisorreportspage")}
+        >
+          • Supervisors
+        </div>
+
+        {/* Profile */}
+        <div
+          className={`p-3 cursor-pointer rounded transition-colors duration-300 ${
+            location.pathname === "/dashboard/admin/profile" ? "bg-blue-700" : "hover:bg-blue-600"
+          }`}
+          onClick={() => navigate("/dashboard/admin/profile")}
+        >
+          👤 Profile
+        </div>
       </nav>
 
       <button

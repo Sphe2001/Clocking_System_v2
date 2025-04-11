@@ -20,6 +20,11 @@ import ViewAttendance from './pages/supervisor/viewAttendance/viewAttendance.jsx
 import ForgotPasswordPage from './pages/auth/forgotpassword.jsx';
 import VerifyResetPasswordOTPPage from './pages/auth/verifyResetPasswordOTP.jsx';
 import ResetPasswordPage from './pages/auth/ResetPassword.jsx';
+import StudentsPage from './pages/admin/users/students.jsx';
+import SupervisorsPage from './pages/admin/users/supervisors.jsx';
+import StudentReportsPage from './pages/admin/reports/studentReports.jsx';
+import SupervisorReportsPage from './pages/admin/reports/supervisorReports.jsx';
+import RegisterStudentPage from './pages/admin/users/registerStudent.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -37,6 +42,11 @@ createRoot(document.getElementById('root')).render(
           <Route path="/dashboard/admin/profile" element={<AdminProfile />} />
           <Route path="/dashboard/admin/reports" element={<AdminReports />} />
           <Route path="/dashboard/admin" element={<AdminDashboard />} />
+          <Route path="/dashboard/admin/users/studentspage" element={<StudentsPage />} />
+          <Route path="/dashboard/admin/users/supervisorspage" element={<SupervisorsPage/>} />
+          <Route path="/dashboard/admin/reports/studentreportspage" element={<StudentReportsPage/>} />
+          <Route path="/dashboard/admin/reports/supervisorreportspage" element={<SupervisorReportsPage/>} />
+          <Route path="/dashboard/admin/reports/registerstudentpage" element={<RegisterStudentPage/>} />
           <Route path="/dashboard/admin/users" element={<AdminUsers />} />
           <Route path="/dashboard/student" element={<StudentDashboard />} />
           <Route path="/dashboard/student/viewProfile" element={<ViewProfile />} />

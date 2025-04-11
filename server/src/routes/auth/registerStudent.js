@@ -118,7 +118,7 @@ router.post("/register/student", async (req, res) => {
     //       sameSite: "Strict",
     //       maxAge: 24 * 60 * 60 * 1000 * 7,
     //     });
-    const redirectUrl = "/dashboard/admin"
+    const redirectUrl = "/dashboard/admin/users/studentspage"
     res.status(201).json({
       message: "Student registered successfully. Email sent.",
       redirectUrl,

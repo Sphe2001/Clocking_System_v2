@@ -106,7 +106,7 @@ router.post("/register/supervisor", async (req, res) => {
     await sendRegistrationEmail(email, password);
 
     
-    const redirectUrl = "/dashboard/admin"
+    const redirectUrl = "/dashboard/admin/users/supervisorspage"
     res.status(201).json({
       message: "Supervisor registered successfully. Email sent.",
       supervisor,
