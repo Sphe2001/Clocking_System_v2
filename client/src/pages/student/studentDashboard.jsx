@@ -22,7 +22,6 @@ const StudentDashboard = () => {
           withCredentials: true,
         }
       );
-
       setLeaveStatus(response.data);
       setShowStatusModal(true);
     } catch (error) {
@@ -228,15 +227,15 @@ const StudentDashboard = () => {
           </div>
         </div>
       )}
-      {showStatusModal && (
+      {showStatusModal && leaveStatus && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm">
           <div className="bg-white w-11/12 max-w-md rounded-lg p-6 text-center shadow-lg">
             <h2 className="text-2xl font-bold mb-4">Status</h2>
             <p className="mb-4 text-gray-800 text-lg">
-              <strong>Reason:</strong> I’m not feeling well and need to rest.
+              <strong>Reason:</strong> {leaveStatus.reason}
             </p>
             <p className="mb-6 text-gray-800 text-lg">
-              <strong>Status:</strong> Pending
+              <strong>Status:</strong> {leaveStatus.status}
             </p>
             <button
               className="bg-gray-400 text-white px-4 py-2 rounded-md hover:bg-gray-500 cursor-pointer font-semibold"

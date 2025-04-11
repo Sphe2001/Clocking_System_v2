@@ -31,16 +31,29 @@ router.get("/viewrequest/status", async (req, res) => {
           [Op.between]: [startOfDay, endOfDay],
         },
       },
-      order: [['createdAt', 'DESC']],
+      order: [["createdAt", "DESC"]],
     });
 
     if (!leaveRequest) {
-      return res.status(404).json({ message: "No leave request found for today." });
+      return res
+        .status(404)
+        .json({ message: "No leave request found for today." });
+    }
+
+    let leaveIsApproved = leaveRequest.isApproved;
+    let status;
+
+    if (leaveIsApproved === null) {
+      status = "Pending";
+    } else if (leaveIsApproved) {
+      status = "Approved";
+    } else {
+      status = "Rejected";
     }
 
     res.status(200).json({
       reason: leaveRequest.reason,
-      status: leaveRequest.status,
+      status: status,
     });
   } catch (error) {
     console.error("Error fetching leave status:", error);
