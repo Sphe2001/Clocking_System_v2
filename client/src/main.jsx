@@ -28,6 +28,7 @@ import SupervisorReportsPage from './pages/admin/reports/supervisorReports.jsx';
 import RegisterStudentPage from './pages/admin/users/registerStudent.jsx';
 import RegisterSupervisorPage from './pages/admin/users/registerSupervisor.jsx';
 import RequestsList from './pages/supervisor/viewRequests/requestsList.jsx';
+import EditStudentProfile from './pages/admin/users/editStudent.jsx';
 
 
 createRoot(document.getElementById('root')).render(
@@ -52,6 +53,7 @@ createRoot(document.getElementById('root')).render(
           <Route path="/dashboard/admin/reports/supervisorreportspage" element={<SupervisorReportsPage/>} />
           <Route path="/dashboard/admin/registerstudentpage" element={<RegisterStudentPage/>} />
           <Route path="/dashboard/admin/registersupervisorpage" element={<RegisterSupervisorPage/>} />
+          <Route path="/dashboard/admin/editstudentprofile" element={<EditStudentProfile />} />
           <Route path="/dashboard/admin/users" element={<AdminUsers />} />
           <Route path="/dashboard/student" element={<StudentDashboard />} />
           <Route path="/dashboard/student/viewProfile" element={<ViewProfile />} />

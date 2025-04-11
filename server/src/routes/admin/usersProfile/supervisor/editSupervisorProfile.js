@@ -5,9 +5,10 @@ const cookieParser = require("cookie-parser");
 const router = express.Router();
 router.use(cookieParser());
 
-router.post("/edit/supervisorProfile", async (req, res) => {
+router.post("/edit/supervisorProfile/:staffNo", async (req, res) => {
   try {
-    const { staffNo, surname, initials, specialization } = req.body;
+    const { staffNo } = req.params;
+    const { surname, initials, specialization } = req.body;
 
     const user = await Supervisor.findOne({ where: { staffNo } });
 
