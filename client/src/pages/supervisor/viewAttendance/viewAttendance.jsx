@@ -1,45 +1,114 @@
-import React from 'react';
-import SupervisorNavbar from '../../../components/supervisorNavbar';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import SupervisorNavbar from "../../../components/supervisorNavbar";
+import toast from "react-hot-toast";
 
 const ViewAttendance = () => {
-  // Sample data for the attendance (you can replace this with real data from your backend)
-  const attendanceData = [
-    { username: 'jdoe', name: 'John', surname: 'Doe', clockIn: '8:00 AM', clockOut: '4:00 PM' },
-    { username: 'asmith', name: 'Alice', surname: 'Smith', clockIn: '9:00 AM', clockOut: '5:00 PM' },
-    { username: 'mjones', name: 'Michael', surname: 'Jones', clockIn: '8:30 AM', clockOut: '4:30 PM' },
-  ];
+  const domain = import.meta.env.VITE_REACT_APP_DOMAIN;
+  const [attendanceData, setAttendanceData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAttendance = async () => {
+      setLoading(true);
+      try {
+        const res = await axios.get(`${domain}/api/admin/attendance/students`, {
+          withCredentials: true,
+        });
+        setAttendanceData(res.data);
+      } catch (err) {
+        toast.error("Failed to fetch attendance data");
+        console.error("Error fetching attendance data:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAttendance();
+  }, []);
+
+  const getStatus = (clockInTime) => {
+    if (!clockInTime) return { text: "Not in", color: "text-red-600" };
+    const clockInDate = new Date(`1970-01-01T${clockInTime}:00`);
+    const cutoffTime = new Date(`1970-01-01T08:10:00`);
+
+    if (clockInDate < cutoffTime) {
+      return { text: "On time", color: "text-green-600" };
+    } else {
+      return { text: "Late", color: "text-orange-600" };
+    }
+  };
 
   return (
-    <div className="min-h-screen flex flex-col p-10 bg-gradient-to-b from-green-200 to-blue-200 backdrop-blur-md rounded-lg shadow-lg">
+    <div className="min-h-screen flex flex-col p-10 bg-gradient-to-b from-blue-200 to-blue-300 backdrop-blur-md rounded-lg shadow-lg">
       {/* Navbar */}
       <SupervisorNavbar />
 
       {/* Main Content Section */}
       <div className="overflow-x-auto mt-10">
-
-        <h1 className="text-5xl font-semibold  p-5 pl-0 ">ATTENDANCE:</h1>
-        <table className="min-w-full table-auto bg- border-collapse border border-none rounded-lg shadow-md">
-          <thead>
-            <tr>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700 border-b">Username</th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700 border-b">Name</th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700 border-b">Surname</th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700 border-b">Clock In Time</th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700 border-b">Clock Out Time</th>
-            </tr>
-          </thead>
-          <tbody>
-            {attendanceData.map((entry, index) => (
-              <tr key={index} className="hover:bg-red-100 ">
-                <td className="px-6 py-3 text-sm text-gray-800 border-b">{entry.username}</td>
-                <td className="px-6 py-3 text-sm text-gray-800 border-b">{entry.name}</td>
-                <td className="px-6 py-3 text-sm text-gray-800 border-b">{entry.surname}</td>
-                <td className="px-6 py-3 text-sm text-gray-800 border-b">{entry.clockIn}</td>
-                <td className="px-6 py-3 text-sm text-gray-800 border-b ">{entry.clockOut}</td>
+        <h1 className="text-5xl font-semibold p-5 pl-0">ATTENDANCE:</h1>
+        {loading ? ( // Show loading state
+          <p className="text-gray-700">Loading attendance data...</p>
+        ) : (
+          <table className="min-w-full table-auto border-collapse border border-none rounded-lg shadow-md">
+            <thead>
+              <tr>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700 border-b">
+                  Student Number
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700 border-b">
+                  Clock In Time
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700 border-b">
+                  Clock Out Time
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700 border-b">
+                  Status
+                </th>{" "}
+                {/* New Status Column */}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {attendanceData.length === 0 ? ( // Check if data is empty
+                <tr>
+                  <td colSpan="6" className="text-center py-4 text-gray-600">
+                    No attendance records found.
+                  </td>
+                </tr>
+              ) : (
+                attendanceData.map((entry, index) => (
+                  <tr key={index} className="hover:bg-red-100">
+                    <td className="px-6 py-3 text-sm text-gray-800 border-b">
+                      {entry.studentNo}
+                    </td>
+                    <td className="px-6 py-3 text-sm text-gray-800 border-b">
+                      {entry.clock_in
+                        ? new Date(entry.clock_in).toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })
+                        : "--"}
+                    </td>
+                    <td className="px-6 py-3 text-sm text-gray-800 border-b">
+                      {entry.clock_out
+                        ? new Date(entry.clock_out).toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })
+                        : "--"}
+                    </td>
+                    <td className="px-6 py-3 text-sm border-b">
+                      <span className={getStatus(entry.clockIn).color}>
+                        {getStatus(entry.clockIn).text}
+                      </span>
+                    </td>{" "}
+                    {/* Status Display */}
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        )}
       </div>
     </div>
   );

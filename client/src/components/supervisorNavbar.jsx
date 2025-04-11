@@ -1,22 +1,42 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react"; // ← added useEffect
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   UserIcon,
   DeviceTabletIcon,
   PowerIcon,
+  InboxIcon,
 } from "@heroicons/react/24/outline";
 import axios from "axios";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 const SupervisorNavbar = () => {
   const domain = import.meta.env.VITE_REACT_APP_DOMAIN;
   const location = useLocation();
   const navigate = useNavigate();
 
-  // State to track which icon was clicked for animation
+  const [hasNewRequest, setHasNewRequest] = useState(false);
   const [activeIcon, setActiveIcon] = useState(null);
 
-  // Logout Function (Replace with actual logic)
+  useEffect(() => {
+    const fetchRequests = async () => {
+      try {
+        const res = await axios.get(
+          `${domain}/api/supervisor/students/requests`,
+          {
+            withCredentials: true,
+          }
+        );
+
+        const anyUnviewed = res.data.some((r) => r.isViewed === false);
+        setHasNewRequest(anyUnviewed);
+      } catch (err) {
+        console.error("Failed to fetch requests", err);
+      }
+    };
+
+    fetchRequests();
+  }, []);
+
   const handleLogout = async () => {
     try {
       const response = await axios.get(`${domain}/api/auth/logout`, {
@@ -27,42 +47,38 @@ const SupervisorNavbar = () => {
       });
 
       toast.success(response.data?.message || "Logged out successfully");
-      navigate(response.data?.redirectUrl || "/login"); // fallback to login if redirectUrl is missing
+      navigate(response.data?.redirectUrl || "/login");
     } catch (error) {
       console.error(error);
       const errorMessage =
         error.response?.data?.error ||
         error.response?.data?.message ||
         "Logout failed";
-
       toast.error(errorMessage);
     }
   };
 
-  // Function to handle View Profile navigation
   const handleProfileClick = () => {
-    setActiveIcon("profile"); // Set active state for profile
+    setActiveIcon("profile");
     navigate("/dashboard/supervisor/viewProfile");
   };
 
-  // Function to handle View Attendance navigation
   const handleAttendanceClick = () => {
-    setActiveIcon("attendance"); // Set active state for attendance
+    setActiveIcon("attendance");
     navigate("/dashboard/supervisor/viewAttendance");
   };
 
-  // Function to handle Supervisor Dashboard navigation
   const handleDashboardClick = () => {
-    setActiveIcon("dashboard"); // Set active state for dashboard
+    setActiveIcon("dashboard");
     navigate("/dashboard/supervisor");
   };
 
   return (
-    <nav className="bg-gradient-to-b from-blue-100 to-green-500 p-5 mr-5 shadow-md w-full backdrop-blur-md rounded-lg">
+    <nav className="bg-slate-900 p-5 mr-5 shadow-md w-full backdrop-blur-md rounded-lg">
       <div className="container mx-auto flex p-3 justify-between items-center">
         {/* Dashboard Title */}
         <h1
-          className={`text-4xl font-bold cursor-pointer font-serif hover:text-blue-500 ${
+          className={`text-4xl font-bold text-white cursor-pointer font-serif hover:text-blue-400 ${
             activeIcon === "dashboard" ? "animate-bounce" : ""
           }`}
           onClick={handleDashboardClick}
@@ -72,18 +88,43 @@ const SupervisorNavbar = () => {
 
         {/* Navbar Links */}
         <div className="flex space-x-8">
+          {/* Requests */}
+          <div
+            className={`relative flex items-center text-white cursor-pointer hover:text-blue-400 ${
+              activeIcon === "request" ? "text-blue-400" : ""
+            }`}
+            onClick={() => {
+              setActiveIcon("request");
+              navigate("/dashboard/supervisor/requests");
+            }}
+          >
+            <InboxIcon className="mx-1 h-6 w-6 stroke-current mr-2" />
+            <span
+              className={
+                location.pathname === "/dashboard/supervisor/requests"
+                  ? "text-blue-400"
+                  : ""
+              }
+            >
+              Requests
+            </span>
+            {hasNewRequest && (
+              <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-600 animate-pulse"></span>
+            )}
+          </div>
+
           {/* View Profile */}
           <div
-            className={`flex items-center cursor-pointer ${
+            className={`flex items-center text-white cursor-pointer hover:text-blue-400 ${
               activeIcon === "profile" ? "animate-bounce" : ""
             }`}
             onClick={handleProfileClick}
           >
-            <UserIcon className="mx-1 h-6 w-6 stroke-blue-800 mr-3" />
+            <UserIcon className="mx-1 h-6 w-6 stroke-current mr-2" />
             <span
               className={
                 location.pathname === "/pages/supervisor/viewProfile"
-                  ? "text-red-300"
+                  ? "text-red-400"
                   : ""
               }
             >
@@ -93,16 +134,16 @@ const SupervisorNavbar = () => {
 
           {/* View Attendance */}
           <div
-            className={`flex items-center cursor-pointer ${
+            className={`flex items-center text-white cursor-pointer hover:text-blue-400 ${
               activeIcon === "attendance" ? "animate-bounce" : ""
             }`}
             onClick={handleAttendanceClick}
           >
-            <DeviceTabletIcon className="mx-1 h-6 w-6 stroke-blue-800 mr-3" />
+            <DeviceTabletIcon className="mx-1 h-6 w-6 stroke-current mr-2" />
             <span
               className={
                 location.pathname === "/pages/supervisor/viewAttendance"
-                  ? "text-red-300"
+                  ? "text-red-400"
                   : ""
               }
             >
@@ -110,15 +151,15 @@ const SupervisorNavbar = () => {
             </span>
           </div>
 
-          {/* Logout Button */}
+          {/* Logout */}
           <div
-            className={`flex items-center text-white cursor-pointer ${
+            className={`flex items-center text-white cursor-pointer hover:text-red-400 ${
               activeIcon === "logout" ? "animate-bounce" : ""
             }`}
             onClick={handleLogout}
           >
-            <PowerIcon className="mx-1 h-6 w-6 stroke-blue-800 mr-3" />
-            <button className="bg-red-600 text-lg font-semibold rounded-lg p-1 hover:bg-red-300">
+            <PowerIcon className="mx-1 h-6 w-6 stroke-current mr-2" />
+            <button className="bg-red-600 text-lg font-semibold rounded-lg px-3 py-1 hover:bg-red-400 transition-colors">
               Logout
             </button>
           </div>

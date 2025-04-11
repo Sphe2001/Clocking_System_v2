@@ -27,6 +27,7 @@ import StudentReportsPage from './pages/admin/reports/studentReports.jsx';
 import SupervisorReportsPage from './pages/admin/reports/supervisorReports.jsx';
 import RegisterStudentPage from './pages/admin/users/registerStudent.jsx';
 import RegisterSupervisorPage from './pages/admin/users/registerSupervisor.jsx';
+import RequestsList from './pages/supervisor/viewRequests/requestsList.jsx';
 
 
 createRoot(document.getElementById('root')).render(
@@ -58,6 +59,7 @@ createRoot(document.getElementById('root')).render(
           <Route path="/dashboard/supervisor/viewProfile" element={<ViewSupervisorProfile />}/>
           <Route path="/dashboard/supervisor/viewAttendance" element={<ViewAttendance />} />
           <Route path="/setPassword" element={<SetPasswordPage />}/>
+          <Route path="/dashboard/supervisor/requests" element={<RequestsList />}/>
         </Routes>
       </AnimatePresence>
     </BrowserRouter>

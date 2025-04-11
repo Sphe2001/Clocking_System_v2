@@ -72,16 +72,16 @@ const SupervisorDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col p-10 bg-gradient-to-b from-green-200 to-blue-200 backdrop-blur-md rounded-lg shadow-lg">
+    <div className="min-h-screen flex flex-col p-10 bg-gray-100">
       <Toaster />
       <SupervisorNavbar />
 
-      <div className="flex flex-col items-center justify-center flex-grow pt-20 text-white px-6 sm:px-8 md:px-12">
-        <div className="relative z-10 max-w-lg w-full text-center space-y-6 p-8 bg-gradient-to-b from-green-500 to-blue-100 bg-opacity-10 backdrop-blur-md rounded-lg shadow-lg">
-          <h1 className="text-6xl font-extrabold text-black font-serif">
+      <div className="flex flex-col items-center justify-center flex-grow pt-20 px-6 sm:px-8 md:px-12">
+        <div className="relative z-10 max-w-lg w-full text-center space-y-6 p-8 bg-white bg-opacity-80 backdrop-blur-lg rounded-xl shadow-xl">
+          <h1 className="text-5xl font-extrabold text-gray-900 font-serif">
             Welcome, Supervisor!
           </h1>
-          <p className="text-lg sm:text-xl text-black">
+          <p className="text-lg sm:text-xl text-gray-700">
             Click below to sign your attendance or end the session.
           </p>
 

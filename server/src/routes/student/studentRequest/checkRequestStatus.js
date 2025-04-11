@@ -41,9 +41,12 @@ router.get("/viewrequest/status", async (req, res) => {
     }
 
     let leaveIsApproved = leaveRequest.isApproved;
+    let leaveIsViewed = leaveRequest.isViewed;
     let status;
 
-    if (leaveIsApproved === null) {
+    if (leaveIsApproved === null && leaveIsViewed) {
+      status = "Viewed";
+    } else if (leaveIsApproved === null) {
       status = "Pending";
     } else if (leaveIsApproved) {
       status = "Approved";
