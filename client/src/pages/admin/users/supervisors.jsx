@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // <-- Import useNavigate
 import { motion } from "framer-motion";
 import Sidebar from "../../../components/adminNavbar";
 
 function SupervisorsPage() {
-    const domain = import.meta.env.VITE_REACT_APP_DOMAIN; 
+  const navigate = useNavigate(); // <-- Initialize navigate
+  const domain = import.meta.env.VITE_REACT_APP_DOMAIN; 
   const [searchQuery, setSearchQuery] = useState("");
   const [supervisors, setSupervisors] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -50,11 +52,26 @@ function SupervisorsPage() {
           All Supervisors
         </motion.h1>
 
+        {/* Add Supervisor Button */}
+        <motion.div
+          className="mb-6"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 1 }}
+        >
+          <button
+            onClick={() => navigate("/dashboard/admin/registersupervisorpage")}
+            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded shadow"
+          >
+            Add Supervisor
+          </button>
+        </motion.div>
+
         <motion.div
           className="flex flex-col gap-4 items-center mb-6"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 1 }}
+          transition={{ duration: 0.5, delay: 1.2 }}
         >
           <div className="flex flex-col">
             <label className="font-semibold text-center mb-1">Search:</label>
@@ -126,7 +143,7 @@ function SupervisorsPage() {
                       <td className="p-4 border-b">{supervisor.role}</td>
                       <td className="p-4 border-b">{supervisor.email}</td>
                       <td className="p-4 border-b">{supervisor.contactNo}</td>
-                      <td className="p-4 border-b">{supervisor.verified ? "True" : "False"}</td>
+                      <td className="p-4 border-b">{supervisor.isVerified ? "True" : "False"}</td>
                     </motion.tr>
                   ))}
                 </tbody>

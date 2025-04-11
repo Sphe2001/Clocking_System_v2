@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom"; // Step 1
 import Sidebar from "../../../components/adminNavbar";
 
 function StudentsPage() {
-    const domain = import.meta.env.VITE_REACT_APP_DOMAIN; 
+  const domain = import.meta.env.VITE_REACT_APP_DOMAIN;
+  const navigate = useNavigate(); // Step 2
+
   const [searchQuery, setSearchQuery] = useState("");
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -49,6 +52,17 @@ function StudentsPage() {
         >
           All Students
         </motion.h1>
+
+        {/* ➕ Add Student Button */}
+        <motion.button
+          onClick={() => navigate("/dashboard/admin/registerstudentpage")} // Step 3
+          className="mb-4 px-6 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 transition"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 1 }}
+        >
+          + Add New Student
+        </motion.button>
 
         <motion.div
           className="flex flex-col gap-4 items-center mb-6"
@@ -126,7 +140,7 @@ function StudentsPage() {
                       <td className="p-4 border-b">{student.role}</td>
                       <td className="p-4 border-b">{student.email}</td>
                       <td className="p-4 border-b">{student.contactNo}</td>
-                      <td className="p-4 border-b">{student.verified ? "True" : "False"}</td>
+                      <td className="p-4 border-b">{student.isVerified ? "True" : "False"}</td>
                     </motion.tr>
                   ))}
                 </tbody>

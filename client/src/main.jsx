@@ -49,8 +49,8 @@ createRoot(document.getElementById('root')).render(
           <Route path="/dashboard/admin/users/supervisorspage" element={<SupervisorsPage/>} />
           <Route path="/dashboard/admin/reports/studentreportspage" element={<StudentReportsPage/>} />
           <Route path="/dashboard/admin/reports/supervisorreportspage" element={<SupervisorReportsPage/>} />
-          <Route path="/dashboard/admin/reports/registerstudentpage" element={<RegisterStudentPage/>} />
-          <Route path="/dashboard/admin/reports/registersupervisorpage" element={<RegisterSupervisorPage/>} />
+          <Route path="/dashboard/admin/registerstudentpage" element={<RegisterStudentPage/>} />
+          <Route path="/dashboard/admin/registersupervisorpage" element={<RegisterSupervisorPage/>} />
           <Route path="/dashboard/admin/users" element={<AdminUsers />} />
           <Route path="/dashboard/student" element={<StudentDashboard />} />
           <Route path="/dashboard/student/viewProfile" element={<ViewProfile />} />
