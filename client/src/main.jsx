@@ -9,7 +9,7 @@ import AdminReports from './pages/admin/reports/adminReports.jsx';
 import AdminDashboard from './pages/admin/adminDashboard.jsx'; 
 import AdminUsers from './pages/admin/users/adminUsers.jsx';
 import StudentDashboard from './pages/student/studentDashboard.jsx'
-import ViewProfile from './pages/student/viewProfile/viewProfile.jsx';
+import ViewStudentProfile from './pages/student/viewProfile/viewStudentProfile.jsx';
 import LoginPage from './pages/auth/login.jsx';
 import SignUpPage from './pages/auth/signUp.jsx';
 import VerifyStudentEmail from './pages/auth/verifyStudentEmail.jsx';
@@ -54,7 +54,7 @@ createRoot(document.getElementById('root')).render(
           <Route path="/dashboard/admin/registersupervisorpage" element={<RegisterSupervisorPage/>} />
           <Route path="/dashboard/admin/users" element={<AdminUsers />} />
           <Route path="/dashboard/student" element={<StudentDashboard />} />
-          <Route path="/dashboard/student/viewProfile" element={<ViewProfile />} />
+          <Route path="/dashboard/student/viewStudentProfile" element={<ViewStudentProfile />} />
           <Route path="/dashboard/supervisor" element={<SupervisorDashboard />} />
           <Route path="/dashboard/supervisor/viewProfile" element={<ViewSupervisorProfile />}/>
           <Route path="/dashboard/supervisor/viewAttendance" element={<ViewAttendance />} />

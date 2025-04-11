@@ -17,7 +17,7 @@ const StudentNavbar = () => {
 
   const handleProfileClick = () => {
     setActiveIcon("profile");
-    navigate("/dashboard/student/viewProfile");
+    navigate("/dashboard/student/viewStudentProfile");
   };
 
   const handleAttendanceClick = () => {
