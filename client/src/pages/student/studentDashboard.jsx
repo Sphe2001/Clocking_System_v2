@@ -12,6 +12,25 @@ const StudentDashboard = () => {
   const [showLeaveModal, setShowLeaveModal] = useState(false);
   const [reason, setReason] = useState("");
 
+  const [leaveStatus, setLeaveStatus] = useState(null);
+
+  const fetchLeaveStatus = async () => {
+    try {
+      const response = await axios.get(
+        `${domain}/api/student/viewrequest/status`,
+        {
+          withCredentials: true,
+        }
+      );
+
+      setLeaveStatus(response.data);
+      setShowStatusModal(true);
+    } catch (error) {
+      console.error("Failed to fetch leave status:", error);
+      toast.error(error.response?.data?.message || "Failed to fetch status.");
+    }
+  };
+
   // handle form submission
   const handleRequestLeave = async () => {
     if (!reason.trim()) {
@@ -21,7 +40,7 @@ const StudentDashboard = () => {
 
     try {
       await axios.post(
-        `${domain}/api/student/request-leave`,
+        `${domain}/api/student/leave-request`,
         { reason },
         {
           withCredentials: true,
@@ -168,7 +187,7 @@ const StudentDashboard = () => {
                   className="w-full text-center px-4 py-2 text-gray-700 hover:bg-gray-100 font-semibold cursor-pointer"
                   onClick={() => {
                     setIsDropdownOpen(false);
-                    setShowStatusModal(true);
+                    fetchLeaveStatus();
                   }}
                 >
                   Request Status
