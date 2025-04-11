@@ -96,7 +96,7 @@ router.post("/register/supervisor", async (req, res) => {
       initials,
       password: hashedPassword,
       specialization,
-      isVerified: false,
+      isVerified: true,
       isPasswordResetVerified: false,
       isPasswordSet: false,
     });
