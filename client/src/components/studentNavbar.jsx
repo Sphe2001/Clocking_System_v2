@@ -6,17 +6,15 @@ import {
   PowerIcon,
 } from "@heroicons/react/24/outline";
 import axios from "axios";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 const StudentNavbar = () => {
   const domain = import.meta.env.VITE_REACT_APP_DOMAIN;
   const location = useLocation();
   const navigate = useNavigate();
 
-  // State to track which icon was clicked for animation
   const [activeIcon, setActiveIcon] = useState(null);
 
-  // Handle navigation
   const handleProfileClick = () => {
     setActiveIcon("profile");
     navigate("/dashboard/student/viewProfile");
@@ -37,7 +35,7 @@ const StudentNavbar = () => {
       });
 
       toast.success(response.data?.message || "Logged out successfully");
-      navigate(response.data?.redirectUrl || "/login"); // fallback to login if redirectUrl is missing
+      navigate(response.data?.redirectUrl || "/login");
     } catch (error) {
       console.error(error);
       const errorMessage =
@@ -55,11 +53,10 @@ const StudentNavbar = () => {
   };
 
   return (
-    <nav className="bg-gradient-to-b from-blue-100 to-blue-500 text-white p-5 mr-5 shadow-md w-full backdrop-blur-md rounded-lg shadow-lg">
+    <nav className="bg-white text-black p-5 shadow-md w-full border-b border-gray-200">
       <div className="container mx-auto flex p-3 justify-between items-center">
-        {/* Dashboard Title */}
         <h1
-          className={`text-4xl font-bold cursor-pointer font-serif hover:text-blue-500 ${
+          className={`text-3xl font-bold text-blue-900 cursor-pointer font-serif hover:text-blue-500 ${
             activeIcon === "dashboard" ? "animate-bounce" : ""
           }`}
           onClick={handleDashboardClick}
@@ -67,20 +64,18 @@ const StudentNavbar = () => {
           Student Dashboard
         </h1>
 
-        {/* Navbar Links */}
         <div className="flex space-x-8">
-          {/* View Profile */}
           <div
             className={`flex items-center cursor-pointer ${
               activeIcon === "profile" ? "animate-bounce" : ""
             }`}
             onClick={handleProfileClick}
           >
-            <UserIcon className="mx-1 h-6 w-6 stroke-green-400" />
+            <UserIcon className="mx-1 h-6 w-6 stroke-blue-500" />
             <span
               className={
-                location.pathname === "/pages/student/viewProfile"
-                  ? "text-red-300"
+                location.pathname === "/dashboard/student/viewProfile"
+                  ? "text-blue-600 font-medium cursor-pointer"
                   : ""
               }
             >
@@ -88,18 +83,17 @@ const StudentNavbar = () => {
             </span>
           </div>
 
-          {/* View Attendance */}
           <div
             className={`flex items-center cursor-pointer ${
               activeIcon === "attendance" ? "animate-bounce" : ""
             }`}
             onClick={handleAttendanceClick}
           >
-            <DeviceTabletIcon className="mx-1 h-6 w-6 stroke-green-400" />
+            <DeviceTabletIcon className="mx-1 h-6 w-6 stroke-blue-500" />
             <span
               className={
-                location.pathname === "/pages/student/viewProfile"
-                  ? "text-gray-300"
+                location.pathname === "/dashboard/student/viewAttendanceHistory"
+                  ? "text-blue-600 font-medium cursor-pointer"
                   : ""
               }
             >
@@ -107,15 +101,14 @@ const StudentNavbar = () => {
             </span>
           </div>
 
-          {/* Logout Button */}
           <div
             className={`flex items-center cursor-pointer ${
               activeIcon === "logout" ? "animate-bounce" : ""
             }`}
             onClick={handleLogout}
           >
-            <PowerIcon className="mx-1 h-6 w-6 stroke-green-400" />
-            <button className="bg-red-600 text-lg font-semibold rounded-lg p-1 hover:bg-red-300">
+            <PowerIcon className="mx-1 h-6 w-6 stroke-red-500" />
+            <button className="bg-red-600 text-white text-sm font-semibold rounded-md px-3 py-1 hover:bg-red-500">
               Logout
             </button>
           </div>

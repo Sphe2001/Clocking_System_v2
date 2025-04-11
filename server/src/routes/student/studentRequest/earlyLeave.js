@@ -11,7 +11,7 @@ dotenv.config();
 const router = express.Router();
 router.use(cookieParser());
 
-router.post("/leave_request", async (req, res) => {
+router.post("/leave-request", async (req, res) => {
   try {
     const { reason } = req.body;
     const studentNo = getUserId(req);

@@ -20,12 +20,14 @@ import ViewAttendance from './pages/supervisor/viewAttendance/viewAttendance.jsx
 import ForgotPasswordPage from './pages/auth/forgotpassword.jsx';
 import VerifyResetPasswordOTPPage from './pages/auth/verifyResetPasswordOTP.jsx';
 import ResetPasswordPage from './pages/auth/ResetPassword.jsx';
+import SetPasswordPage from './pages/auth/setPassword.jsx';
 import StudentsPage from './pages/admin/users/students.jsx';
 import SupervisorsPage from './pages/admin/users/supervisors.jsx';
 import StudentReportsPage from './pages/admin/reports/studentReports.jsx';
 import SupervisorReportsPage from './pages/admin/reports/supervisorReports.jsx';
 import RegisterStudentPage from './pages/admin/users/registerStudent.jsx';
 import RegisterSupervisorPage from './pages/admin/users/registerSupervisor.jsx';
+
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -55,7 +57,7 @@ createRoot(document.getElementById('root')).render(
           <Route path="/dashboard/supervisor" element={<SupervisorDashboard />} />
           <Route path="/dashboard/supervisor/viewProfile" element={<ViewSupervisorProfile />}/>
           <Route path="/dashboard/supervisor/viewAttendance" element={<ViewAttendance />} />
-       
+          <Route path="/setPassword" element={<SetPasswordPage />}/>
         </Routes>
       </AnimatePresence>
     </BrowserRouter>

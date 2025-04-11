@@ -13,14 +13,15 @@ const sendRegistrationEmail = async ( email, password) => {
       html: `<p>You have been registered for the ICEP program here are your login details: </p>
       <p> Username <b>${email}</b> </p>
       <p> Password <b>${password}</b> </p>`
-      
     };
 
   
     await transporter.sendMail(mailOption);
+    console.log(`Email sent to ${email}`);
   } catch (error) {
     console.error("Error sending email:", error);
   }
 };
 
 module.exports = sendRegistrationEmail;
+

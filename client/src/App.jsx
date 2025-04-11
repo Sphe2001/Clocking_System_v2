@@ -1,6 +1,5 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
 
 export default function WelcomePage() {
   const navigate = useNavigate();
@@ -38,7 +37,7 @@ export default function WelcomePage() {
           duration: 1.5,
         }}
         onClick={() => navigate("/login")}
-        className="mt-10 bg-white text-indigo-600 px-6 py-3 rounded-full text-lg font-semibold shadow-lg hover:bg-gray-200 transition"
+        className="mt-10 bg-white text-indigo-600 px-6 py-3 rounded-full text-lg font-semibold shadow-lg hover:bg-gray-200 transition cursor-pointer"
       >
         Get Started
       </motion.button>

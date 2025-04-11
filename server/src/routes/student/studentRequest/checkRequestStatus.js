@@ -24,25 +24,27 @@ router.get("/viewrequest/status", async (req, res) => {
     const endOfDay = new Date();
     endOfDay.setHours(23, 59, 59, 999);
 
-    const requests = await studentRequest.findAll({
+    const leaveRequest = await studentRequest.findOne({
       where: {
         studentNo,
         createdAt: {
           [Op.between]: [startOfDay, endOfDay],
         },
       },
-      attributes: ["reason", "isApproved", "isViewed", "createdAt"], // optional: return only needed fields
-      order: [["createdAt", "DESC"]], // optional: most recent first
+      order: [['createdAt', 'DESC']],
     });
 
-    if (!requests || requests.length === 0) {
-      return res.status(404).json({ message: "No requests found for today" });
+    if (!leaveRequest) {
+      return res.status(404).json({ message: "No leave request found for today." });
     }
 
-    res.status(200).json(requests);
+    res.status(200).json({
+      reason: leaveRequest.reason,
+      status: leaveRequest.status,
+    });
   } catch (error) {
-    console.error("Error fetching request statuses:", error.message);
-    res.status(500).json({ message: "Internal server error", error: error.message });
+    console.error("Error fetching leave status:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 
