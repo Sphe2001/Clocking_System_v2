@@ -20,6 +20,7 @@ import ViewAttendance from './pages/supervisor/viewAttendance/viewAttendance.jsx
 import ForgotPasswordPage from './pages/auth/forgotpassword.jsx';
 import VerifyResetPasswordOTPPage from './pages/auth/verifyResetPasswordOTP.jsx';
 import ResetPasswordPage from './pages/auth/ResetPassword.jsx';
+import SetPasswordPage from './pages/auth/setPassword.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -43,7 +44,7 @@ createRoot(document.getElementById('root')).render(
           <Route path="/dashboard/supervisor" element={<SupervisorDashboard />} />
           <Route path="/dashboard/supervisor/viewProfile" element={<ViewSupervisorProfile />}/>
           <Route path="/dashboard/supervisor/viewAttendance" element={<ViewAttendance />} />
-       
+          <Route path="/setPassword" element={<SetPasswordPage />}/>
         </Routes>
       </AnimatePresence>
     </BrowserRouter>
