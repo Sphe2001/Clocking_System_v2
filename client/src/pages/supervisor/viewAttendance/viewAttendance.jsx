@@ -40,7 +40,7 @@ const ViewAttendance = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col p-10 bg-gradient-to-b from-blue-200 to-blue-300 backdrop-blur-md rounded-lg shadow-lg">
+    <div className="min-h-screen flex flex-col p-10 bg-gradient-to-b from-blue-10 to-blue-10 backdrop-blur-md rounded-lg shadow-lg">
       {/* Navbar */}
       <SupervisorNavbar />
 
@@ -98,8 +98,8 @@ const ViewAttendance = () => {
                         : "--"}
                     </td>
                     <td className="px-6 py-3 text-sm border-b">
-                      <span className={getStatus(entry.clockIn).color}>
-                        {getStatus(entry.clockIn).text}
+                      <span className={getStatus(entry.clock_in).color}>
+                        {getStatus(entry.clock_in).text}
                       </span>
                     </td>{" "}
                     {/* Status Display */}
